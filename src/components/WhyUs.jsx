@@ -1,46 +1,59 @@
-import { Target, Zap, Heart, TrendingUp, ShieldCheck, Phone } from 'lucide-react';
+import {
+  Target, Zap, Heart, TrendingUp, ShieldCheck,
+  BookOpen, Monitor, Users
+} from 'lucide-react';
 import './WhyUs.css';
 
 const REASONS = [
   {
     icon: <Target size={24} />,
-    title: 'Outcome-Focused Training',
-    desc: 'Every class has a clear goal — a skill you can use immediately in real conversations, not just textbook exercises.',
-  },
-  {
-    icon: <Zap size={24} />,
-    title: 'Learn Faster with Immersion',
-    desc: 'Immersive conversation-first approach means you speak from day one — not after months of grammar drills.',
-  },
-  {
-    icon: <Heart size={24} />,
-    title: 'Judgment-Free Environment',
-    desc: 'Our safe, supportive classroom culture encourages you to make mistakes, learn from them, and grow confidently.',
-  },
-  {
-    icon: <TrendingUp size={24} />,
-    title: 'Visible Progress Guaranteed',
-    desc: 'Structured curriculum with regular assessments ensures you track improvement at every stage of the course.',
+    title: 'Structured Learning',
+    desc: 'Every programme follows a clear, structured curriculum — from school tuition to PUC coaching and competitive exam foundations — so students always know what to expect.',
   },
   {
     icon: <ShieldCheck size={24} />,
-    title: 'Qualified Expert Trainers',
-    desc: 'All trainers hold recognized certifications in English language teaching and have 5+ years of training experience.',
+    title: 'Expert Faculty Guidance',
+    desc: 'Experienced, subject-specialist faculty provide clear explanations and dedicated support for every student at every level.',
   },
   {
-    icon: <Phone size={24} />,
-    title: 'WhatsApp Practice Community',
-    desc: 'Daily speaking prompts, vocabulary challenges, and peer practice on a dedicated students\' WhatsApp group.',
+    icon: <Zap size={24} />,
+    title: 'Practical Teaching Methods',
+    desc: 'We combine traditional academic rigor with modern AI-based learning tools and smart classroom technology for effective, practical teaching.',
+  },
+  {
+    icon: <Monitor size={24} />,
+    title: 'Smart Classrooms — Wi-Fi & AC',
+    desc: 'Fully equipped smart classrooms with free Wi-Fi and air conditioning provide a comfortable, focused study environment for all students.',
+  },
+  {
+    icon: <Users size={24} />,
+    title: 'Personalised — Limited Batches',
+    desc: 'Small, limited-size batches ensure every student receives individual attention, timely feedback, and personalised support where needed.',
+  },
+  {
+    icon: <BookOpen size={24} />,
+    title: 'Comprehensive Study Materials',
+    desc: 'Structured, exam-oriented study materials covering all subjects to support thorough academic preparation at every level.',
+  },
+  {
+    icon: <Heart size={24} />,
+    title: 'Regular Mock Tests',
+    desc: 'Frequent mock tests and practice sessions build examination confidence and help students identify areas for improvement.',
+  },
+  {
+    icon: <TrendingUp size={24} />,
+    title: 'Measurable Progress Tracking',
+    desc: 'Systematic monitoring of each student\'s academic progress ensures consistent, measurable improvement throughout the course.',
   },
 ];
 
-const NUMBERS = [
-  { num: '5,000+', label: 'Students Trained' },
-  { num: '98%',    label: 'Satisfaction Rate' },
-  { num: '8+',     label: 'Expert Trainers' },
-  { num: '15+',    label: 'Courses Offered' },
-  { num: '4.9★',   label: 'Average Rating' },
-  { num: '3+',     label: 'States Reached' },
+const HIGHLIGHTS = [
+  { num: 'School',   label: 'Tuition Classes' },
+  { num: 'PUC',      label: 'Science & Commerce' },
+  { num: 'English',  label: 'Spoken English' },
+  { num: 'Computer', label: 'Training' },
+  { num: 'CET/NEET', label: 'JEE Foundation' },
+  { num: 'Career',   label: 'Professional Skills' },
 ];
 
 export default function WhyUs() {
@@ -49,10 +62,10 @@ export default function WhyUs() {
       <div className="container">
         <div className="text-center fade-in">
           <p className="section-label">Why Choose Us</p>
-          <h2 className="section-title">Why Thousands Trust Khaki Academy</h2>
+          <h2 className="section-title">Why Students Choose Khaki Academy</h2>
           <p className="section-subtitle">
-            We do not just teach English — we transform how you think, speak, and carry
-            yourself in every situation.
+            Structured learning, practical teaching, personalised support, and measurable
+            progress — a complete academic environment for every kind of learner.
           </p>
         </div>
 
@@ -71,9 +84,9 @@ export default function WhyUs() {
           ))}
         </div>
 
-        {/* Stats banner */}
+        {/* Highlights banner */}
         <div className="why__stats fade-in">
-          {NUMBERS.map((n, i) => (
+          {HIGHLIGHTS.map((n, i) => (
             <div key={i} className="why__stat">
               <span className="why__stat-num">{n.num}</span>
               <span className="why__stat-label">{n.label}</span>

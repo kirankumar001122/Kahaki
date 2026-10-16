@@ -1,46 +1,35 @@
-import { Link2, Star } from 'lucide-react';
+import { GraduationCap } from 'lucide-react';
 import './Trainers.css';
 
-const TRAINERS = [
+// Govardhan Krishna confirmed from the poster.
+// Additional faculty cards are clearly marked as content placeholders.
+const FACULTY = [
   {
-    name: 'Priya Sharma',
-    role: 'Head Trainer & Founder',
-    exp: '12 Years Experience',
-    speciality: 'Fluency Building • Business English',
-    bio: 'CELTA certified with an MA in English Literature. Priya has coached 2,000+ professionals and students across India in spoken English and communication skills.',
-    rating: 4.9,
-    students: '2,000+',
-    img: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&q=80&auto=format&fit=crop&faces=1',
+    name: 'Govardhan Krishna',
+    role: 'Founder — Khaki Academy',
+    exp: 'Khaki Academy',
+    speciality: 'Academic Coaching',
+    bio: 'Govardhan Krishna is the founder of Khaki Academy, Malur — an Academy of Excellence committed to empowering students and professionals through quality education, effective communication, and practical skills.',
+    hasPhoto: true,
+    photo: '/images/govardhan-krishna.png',
   },
   {
-    name: 'Rahul Mehta',
-    role: 'Senior Communication Coach',
-    exp: '9 Years Experience',
-    speciality: 'Interview Prep • Public Speaking',
-    bio: 'Former corporate trainer for Fortune 500 companies. Rahul specialises in helping job seekers and professionals crack high-stakes interviews with confidence.',
-    rating: 4.8,
-    students: '1,500+',
-    img: 'https://images.unsplash.com/photo-1556157382-97eda2d62296?w=400&q=80&auto=format&fit=crop',
+    name: 'Faculty Member',
+    role: '[Science Faculty — To Be Updated]',
+    exp: 'Science Subjects',
+    speciality: 'Science Coaching',
+    bio: 'Khaki Academy has experienced faculty for Science subjects. Please contact the academy at 7338308071 for details about our Science teaching team.',
+    hasPhoto: false,
+    isPlaceholder: true,
   },
   {
-    name: 'Ananya Krishnan',
-    role: 'Pronunciation & Accent Coach',
-    exp: '7 Years Experience',
-    speciality: 'Pronunciation • Accent Neutralisation',
-    bio: 'Trained in phonetics and linguistics, Ananya helps learners refine their pronunciation, eliminate mother tongue influence, and develop a clear, confident accent.',
-    rating: 4.9,
-    students: '900+',
-    img: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&q=80&auto=format&fit=crop',
-  },
-  {
-    name: 'Vikram Desai',
-    role: 'Beginners & Kids English Trainer',
-    exp: '6 Years Experience',
-    speciality: 'Beginner Adults • Young Learners',
-    bio: 'Vikram has a special gift for making complete beginners feel at ease. His patience, encouragement, and structured approach help shy learners find their voice.',
-    rating: 4.8,
-    students: '700+',
-    img: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80&auto=format&fit=crop',
+    name: 'Faculty Member',
+    role: '[Commerce Faculty — To Be Updated]',
+    exp: 'Commerce Subjects',
+    speciality: 'Commerce Coaching',
+    bio: 'Khaki Academy has experienced faculty for Commerce subjects. Please contact the academy at 7338308071 for details about our Commerce teaching team.',
+    hasPhoto: false,
+    isPlaceholder: true,
   },
 ];
 
@@ -49,27 +38,39 @@ export default function Trainers() {
     <section id="trainers" className="trainers section">
       <div className="container">
         <div className="text-center fade-in">
-          <p className="section-label">Our Trainers</p>
-          <h2 className="section-title">Learn from India's Best Spoken English Coaches</h2>
+          <p className="section-label">Our Faculty</p>
+          <h2 className="section-title">Expert Faculty at Khaki Academy</h2>
           <p className="section-subtitle">
-            All our trainers are certified, experienced, and deeply passionate about helping
-            you find your English-speaking voice.
+            Experienced, dedicated faculty committed to building strong academic foundations
+            and helping every student achieve their educational goals.
           </p>
         </div>
 
         <div className="trainers__grid">
-          {TRAINERS.map((t, i) => (
+          {FACULTY.map((t, i) => (
             <div
               key={i}
               className="trainer-card fade-in"
               style={{ transitionDelay: `${i * 0.1}s` }}
             >
               <div className="trainer-card__img-wrap">
-                <img src={t.img} alt={t.name} className="trainer-card__img" loading="lazy" />
-                <div className="trainer-card__rating">
-                  <Star size={12} fill="#C6A15B" color="#C6A15B" />
-                  <span>{t.rating}</span>
-                </div>
+                {t.hasPhoto ? (
+                  <img
+                    src={t.photo}
+                    alt="Govardhan Krishna, Founder of Khaki Academy"
+                    className="trainer-card__img"
+                    loading="lazy"
+                  />
+                ) : (
+                  <div className="trainer-card__avatar-placeholder">
+                    <div className="trainer-card__avatar-icon">
+                      <GraduationCap size={36} />
+                    </div>
+                    {t.isPlaceholder && (
+                      <span className="trainer-card__avatar-label">Photo — To Be Updated</span>
+                    )}
+                  </div>
+                )}
               </div>
 
               <div className="trainer-card__body">
@@ -78,9 +79,6 @@ export default function Trainers() {
                     <h3 className="trainer-card__name">{t.name}</h3>
                     <p className="trainer-card__role">{t.role}</p>
                   </div>
-                  <a href="#contact" className="trainer-card__linkedin" aria-label="LinkedIn">
-                    <Link2 size={16} />
-                  </a>
                 </div>
 
                 <div className="trainer-card__tags">
@@ -89,21 +87,27 @@ export default function Trainers() {
 
                 <p className="trainer-card__bio">{t.bio}</p>
 
+                {t.isPlaceholder && (
+                  <p className="trainer-card__placeholder-note">
+                    📝 To be updated with verified faculty details.
+                  </p>
+                )}
+
                 <div className="trainer-card__meta">
                   <div className="trainer-card__meta-item">
-                    <span className="trainer-card__meta-num">{t.students}</span>
-                    <span className="trainer-card__meta-label">Students Trained</span>
-                  </div>
-                  <div className="trainer-card__meta-divider"></div>
-                  <div className="trainer-card__meta-item">
-                    <span className="trainer-card__meta-num">{t.speciality.split('•')[0].trim()}</span>
-                    <span className="trainer-card__meta-label">Core Speciality</span>
+                    <span className="trainer-card__meta-num">{t.speciality.split(' ')[0]}</span>
+                    <span className="trainer-card__meta-label">Speciality</span>
                   </div>
                 </div>
               </div>
             </div>
           ))}
         </div>
+
+        <p className="trainers__note">
+          * Faculty details based on official academy information. Contact{' '}
+          <a href="tel:7338308071">7338308071</a> for complete faculty information.
+        </p>
       </div>
     </section>
   );

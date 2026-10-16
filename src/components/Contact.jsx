@@ -1,42 +1,129 @@
 import { useState } from 'react';
-import { Send, Phone, Mail, MapPin, MessageCircle, CheckCircle } from 'lucide-react';
+import { Send, Phone, Mail, MapPin, MessageCircle, CheckCircle, AlertCircle } from 'lucide-react';
 import './Contact.css';
 
-const WHATSAPP_NUMBER = '919876543210'; // Replace with real number
+// ── Contact Configuration ──────────────────────────────────
+const PHONE_1   = '7338308071';
+const PHONE_2   = '7338308072';
+const EMAIL     = 'khakiacademy03@gmail.com';
+const WA_NUMBER = '917338308071'; // Confirm if this number supports WhatsApp
+
+const EMPTY_FORM = {
+  name: '', parentName: '', phone: '', email: '',
+  currentClass: '', stream: '', course: '', learningMode: '',
+  englishLevel: '', consent: false, message: '',
+};
 
 export default function Contact() {
-  const [form, setForm] = useState({ name: '', email: '', phone: '', course: '', message: '' });
+  const [form, setForm]         = useState(EMPTY_FORM);
+  const [errors, setErrors]     = useState({});
   const [submitted, setSubmitted] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading]   = useState(false);
+  const [serverError, setServerError] = useState('');
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value, type, checked } = e.target;
+    setForm((prev) => ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
+    if (errors[name]) setErrors((prev) => ({ ...prev, [name]: '' }));
+    if (serverError) setServerError('');
   };
 
-  const handleSubmit = (e) => {
+  // Client-side validation mirrors server validation
+  const validate = () => {
+    const errs = {};
+    if (!form.name.trim())
+      errs.name = 'Student name is required.';
+    if (!form.phone.trim())
+      errs.phone = 'Mobile number is required.';
+    else if (!/^\d{10}$/.test(form.phone.replace(/\s/g, '')))
+      errs.phone = 'Please enter a valid 10-digit mobile number.';
+    if (form.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email))
+      errs.email = 'Please enter a valid email address.';
+    if (!form.consent)
+      errs.consent = 'Please provide your consent to be contacted.';
+    return errs;
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    const errs = validate();
+    if (Object.keys(errs).length > 0) { setErrors(errs); return; }
+    if (loading || submitted) return;
+
     setLoading(true);
-    // Simulate submission
-    setTimeout(() => {
+    setErrors({});
+    setServerError('');
+
+    // Map form state to the server's expected field names
+    const payload = {
+      student_name:       form.name.trim(),
+      mobile_number:      form.phone.trim().replace(/\s/g, ''),
+      email:              form.email.trim() || null,
+      course:             form.course       || null,
+      learning_mode:      form.learningMode || null,
+      english_level:      form.englishLevel || null,
+      message:            form.message.trim() || null,
+      consent_to_contact: form.consent,
+    };
+
+    try {
+      const res = await fetch('/api/enquiry', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      const json = await res.json();
+
+      if (res.ok && json.ok) {
+        setSubmitted(true);
+      } else if (res.status === 422 && json.errors) {
+        // Map server field names back to form field names for display
+        const fieldMap = {
+          student_name:       'name',
+          mobile_number:      'phone',
+          email:              'email',
+          consent_to_contact: 'consent',
+          learning_mode:      'learningMode',
+          english_level:      'englishLevel',
+        };
+        const remapped = {};
+        Object.entries(json.errors).forEach(([k, v]) => {
+          remapped[fieldMap[k] || k] = v;
+        });
+        setErrors(remapped);
+      } else {
+        // 429 duplicate or 500 server error — show the safe message from the server
+        setServerError(
+          json.message ||
+          'Something went wrong. Please call us directly at 7338308071.'
+        );
+      }
+    } catch {
+      setServerError(
+        'Unable to reach the server. Please check your connection or call us at 7338308071.'
+      );
+    } finally {
       setLoading(false);
-      setSubmitted(true);
-    }, 1200);
+    }
   };
 
   const openWhatsApp = () => {
-    const msg = encodeURIComponent('Hi Khaki Academy! I want to book a free demo class.');
-    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, '_blank');
+    const msg = encodeURIComponent('Hi Khaki Academy! I would like to enquire about admissions and courses.');
+    window.open(`https://wa.me/${WA_NUMBER}?text=${msg}`, '_blank');
   };
+
+  const isSpokenEnglish = form.course === 'spoken-english';
 
   return (
     <section id="contact" className="contact section">
       <div className="container">
         <div className="text-center fade-in">
-          <p className="section-label">Get in Touch</p>
-          <h2 className="section-title">Book Your Free Demo Class Today</h2>
+          <p className="section-label">Contact Admissions</p>
+          <h2 className="section-title">Enquire About Admissions</h2>
           <p className="section-subtitle">
-            Fill in the form below or reach us directly on WhatsApp. We will get back to you
-            within 24 hours to schedule your personalised demo session.
+            Fill in the form below or reach us directly by phone or WhatsApp.
+            Our team will get back to you to discuss your course options.
           </p>
         </div>
 
@@ -44,32 +131,41 @@ export default function Contact() {
           {/* Info panel */}
           <div className="contact__info fade-in-left">
             <div className="contact__info-card">
-              <h3 className="contact__info-heading">We'd Love to Hear from You</h3>
+              <h3 className="contact__info-heading">Contact Khaki Academy</h3>
               <p className="contact__info-sub">
-                Whether you have a question about our courses, want to understand our methodology,
-                or are ready to start your English journey — we are here to help.
+                Reach us for admissions, course details, batch timings, or any other
+                enquiries. We are happy to help.
               </p>
 
               <div className="contact__info-items">
                 <div className="contact__info-item">
                   <span className="contact__info-icon"><Phone size={18} /></span>
                   <div>
-                    <p className="contact__info-label">Call / WhatsApp</p>
-                    <a href={`tel:+${WHATSAPP_NUMBER}`} className="contact__info-value">+91 98765 43210</a>
+                    <p className="contact__info-label">Call Us</p>
+                    <a href={`tel:${PHONE_1}`} className="contact__info-value">{PHONE_1}</a>
+                    <a href={`tel:${PHONE_2}`} className="contact__info-value">{PHONE_2}</a>
                   </div>
                 </div>
+
                 <div className="contact__info-item">
                   <span className="contact__info-icon"><Mail size={18} /></span>
                   <div>
                     <p className="contact__info-label">Email Us</p>
-                    <a href="mailto:hello@khakiacademy.com" className="contact__info-value">hello@khakiacademy.com</a>
+                    <a href={`mailto:${EMAIL}`} className="contact__info-value">{EMAIL}</a>
                   </div>
                 </div>
+
                 <div className="contact__info-item">
                   <span className="contact__info-icon"><MapPin size={18} /></span>
                   <div>
-                    <p className="contact__info-label">Location</p>
-                    <p className="contact__info-value">Online – Available Pan India</p>
+                    <p className="contact__info-label">Our Address</p>
+                    <p className="contact__info-value contact__info-address">
+                      Opp. Anjaneyaswamy Temple,<br />
+                      Above Sowparnika Bakery,<br />
+                      Malur to Hosur Road,<br />
+                      Near Railway Station,<br />
+                      Malur – 563130, Karnataka
+                    </p>
                   </div>
                 </div>
               </div>
@@ -80,21 +176,17 @@ export default function Contact() {
                 Chat with Us on WhatsApp
               </button>
 
-              {/* Timings */}
+              {/* Batch Timings */}
               <div className="contact__timings">
-                <p className="contact__timings-title">Class Timings</p>
+                <p className="contact__timings-title">Batch Timings</p>
                 <div className="contact__timings-rows">
                   <div className="contact__timing-row">
-                    <span>Morning Batch</span>
-                    <span>7:00 AM – 10:00 AM</span>
+                    <span>🌅 Morning Batch</span>
+                    <span>6:00 AM – 8:00 AM</span>
                   </div>
                   <div className="contact__timing-row">
-                    <span>Afternoon Batch</span>
-                    <span>12:00 PM – 3:00 PM</span>
-                  </div>
-                  <div className="contact__timing-row">
-                    <span>Evening Batch</span>
-                    <span>6:00 PM – 9:00 PM</span>
+                    <span>🌆 Evening Batch</span>
+                    <span>5:00 PM – 9:00 PM</span>
                   </div>
                 </div>
               </div>
@@ -106,80 +198,195 @@ export default function Contact() {
             {submitted ? (
               <div className="contact__success">
                 <div className="contact__success-icon"><CheckCircle size={48} /></div>
-                <h3>Thank You, {form.name || 'there'}! 🎉</h3>
+                <h3>Thank You, {form.name || 'there'}!</h3>
                 <p>
-                  Your demo class request has been received. Our team will call or WhatsApp
-                  you within 24 hours to confirm your slot. Get ready to start speaking!
+                  Your enquiry has been saved. The Khaki Academy team will contact you
+                  shortly. You can also reach us directly at{' '}
+                  <a href={`tel:${PHONE_1}`} style={{ color: 'var(--gold-dark)', fontWeight: 600 }}>
+                    {PHONE_1}
+                  </a>.
                 </p>
-                <button className="btn btn-primary" onClick={() => { setSubmitted(false); setForm({ name:'', email:'', phone:'', course:'', message:'' }); }}>
+                <button
+                  className="btn btn-primary"
+                  onClick={() => {
+                    setSubmitted(false);
+                    setForm(EMPTY_FORM);
+                    setServerError('');
+                  }}
+                >
                   Submit Another Enquiry
                 </button>
               </div>
             ) : (
               <form className="contact__form" onSubmit={handleSubmit} noValidate>
-                <h3 className="contact__form-title">Request a Free Demo</h3>
+                <h3 className="contact__form-title">Submit an Enquiry</h3>
+
+                {/* Server-level error banner */}
+                {serverError && (
+                  <div className="contact__server-error">
+                    <AlertCircle size={17} />
+                    <span>{serverError}</span>
+                  </div>
+                )}
 
                 <div className="contact__form-row">
                   <div className="contact__field">
-                    <label htmlFor="name">Full Name *</label>
+                    <label htmlFor="name">Student Name *</label>
                     <input
                       id="name" name="name" type="text" required
-                      placeholder="e.g. Priya Sharma"
+                      placeholder="e.g. Rahul Kumar"
                       value={form.name} onChange={handleChange}
+                      className={errors.name ? 'input-error' : ''}
                     />
+                    {errors.name && <span className="contact__field-error">{errors.name}</span>}
                   </div>
                   <div className="contact__field">
-                    <label htmlFor="phone">Phone / WhatsApp *</label>
+                    <label htmlFor="parentName">Parent / Guardian Name</label>
+                    <input
+                      id="parentName" name="parentName" type="text"
+                      placeholder="Optional"
+                      value={form.parentName} onChange={handleChange}
+                    />
+                  </div>
+                </div>
+
+                <div className="contact__form-row">
+                  <div className="contact__field">
+                    <label htmlFor="phone">Mobile Number *</label>
                     <input
                       id="phone" name="phone" type="tel" required
                       placeholder="e.g. 9876543210"
                       value={form.phone} onChange={handleChange}
+                      className={errors.phone ? 'input-error' : ''}
                     />
+                    {errors.phone && <span className="contact__field-error">{errors.phone}</span>}
+                  </div>
+                  <div className="contact__field">
+                    <label htmlFor="email">Email Address</label>
+                    <input
+                      id="email" name="email" type="email"
+                      placeholder="Optional"
+                      value={form.email} onChange={handleChange}
+                      className={errors.email ? 'input-error' : ''}
+                    />
+                    {errors.email && <span className="contact__field-error">{errors.email}</span>}
+                  </div>
+                </div>
+
+                <div className="contact__form-row">
+                  <div className="contact__field">
+                    <label htmlFor="currentClass">Current Class</label>
+                    <select id="currentClass" name="currentClass" value={form.currentClass} onChange={handleChange}>
+                      <option value="">— Select Class —</option>
+                      <option value="class-1-5">Class 1–5</option>
+                      <option value="class-6-10">Class 6–10</option>
+                      <option value="1st-puc">1st PUC</option>
+                      <option value="2nd-puc">2nd PUC</option>
+                      <option value="working-professional">Working Professional</option>
+                      <option value="other">Other</option>
+                    </select>
+                  </div>
+                  <div className="contact__field">
+                    <label htmlFor="stream">Stream</label>
+                    <select id="stream" name="stream" value={form.stream} onChange={handleChange}>
+                      <option value="">— Select Stream —</option>
+                      <option value="science">Science</option>
+                      <option value="commerce">Commerce</option>
+                      <option value="other">Other / Not Applicable</option>
+                    </select>
                   </div>
                 </div>
 
                 <div className="contact__field">
-                  <label htmlFor="email">Email Address</label>
-                  <input
-                    id="email" name="email" type="email"
-                    placeholder="e.g. priya@email.com"
-                    value={form.email} onChange={handleChange}
-                  />
-                </div>
-
-                <div className="contact__field">
-                  <label htmlFor="course">Course Interested In</label>
+                  <label htmlFor="course">Interested Programme</label>
                   <select id="course" name="course" value={form.course} onChange={handleChange}>
-                    <option value="">— Select a Course —</option>
-                    <option value="foundations">Spoken English Foundations</option>
-                    <option value="professional">Professional Communication</option>
-                    <option value="intensive">Intensive Crash Course</option>
-                    <option value="not-sure">Not Sure Yet (Help Me Choose)</option>
+                    <option value="">— Select Programme —</option>
+                    <option value="school-tuition">School Tuition (Classes 1–10)</option>
+                    <option value="1st-puc-science">1st PUC Science</option>
+                    <option value="2nd-puc-science">2nd PUC Science</option>
+                    <option value="1st-puc-commerce">1st PUC Commerce</option>
+                    <option value="2nd-puc-commerce">2nd PUC Commerce</option>
+                    <option value="cet">CET Foundation</option>
+                    <option value="neet">NEET Foundation</option>
+                    <option value="jee">JEE Foundation</option>
+                    <option value="spoken-english">Spoken English</option>
+                    <option value="computer-training">Computer Training</option>
+                    <option value="career-skills">Career &amp; Professional Skills</option>
+                    <option value="other">Other / Not Sure</option>
                   </select>
                 </div>
 
+                {/* Conditional: English level shown only for Spoken English */}
+                {isSpokenEnglish && (
+                  <div className="contact__field">
+                    <label htmlFor="englishLevel">Current English Level</label>
+                    <select
+                      id="englishLevel" name="englishLevel"
+                      value={form.englishLevel} onChange={handleChange}
+                      className={errors.englishLevel ? 'input-error' : ''}
+                    >
+                      <option value="">— Select Your Level —</option>
+                      <option value="absolute-beginner">Absolute Beginner</option>
+                      <option value="beginner">Beginner</option>
+                      <option value="intermediate">Intermediate</option>
+                      <option value="advanced">Advanced</option>
+                    </select>
+                    {errors.englishLevel && <span className="contact__field-error">{errors.englishLevel}</span>}
+                  </div>
+                )}
+
                 <div className="contact__field">
-                  <label htmlFor="message">Tell Us About Yourself (optional)</label>
+                  <label htmlFor="learningMode">Preferred Learning Mode</label>
+                  <select
+                    id="learningMode" name="learningMode"
+                    value={form.learningMode} onChange={handleChange}
+                    className={errors.learningMode ? 'input-error' : ''}
+                  >
+                    <option value="">— Select Mode —</option>
+                    <option value="offline">Offline – Malur Campus</option>
+                    <option value="live_online">Live Online</option>
+                  </select>
+                  {errors.learningMode && <span className="contact__field-error">{errors.learningMode}</span>}
+                </div>
+
+                <div className="contact__field">
+                  <label htmlFor="message">Message (optional)</label>
                   <textarea
-                    id="message" name="message" rows={4}
-                    placeholder="e.g. I am a job seeker and want to improve my English for interviews..."
+                    id="message" name="message" rows={3}
+                    placeholder="Any questions or additional information..."
                     value={form.message} onChange={handleChange}
                   />
                 </div>
 
-                <button type="submit" className="btn btn-primary btn-lg contact__submit" disabled={loading}>
+                {/* Consent checkbox */}
+                <div className="contact__field contact__field--checkbox">
+                  <label className="contact__consent-label">
+                    <input
+                      type="checkbox"
+                      name="consent"
+                      checked={form.consent}
+                      onChange={handleChange}
+                      className={errors.consent ? 'input-error' : ''}
+                    />
+                    <span>I consent to being contacted by Khaki Academy regarding my enquiry.</span>
+                  </label>
+                  {errors.consent && <span className="contact__field-error">{errors.consent}</span>}
+                </div>
+
+                <button
+                  type="submit"
+                  className="btn btn-primary btn-lg contact__submit"
+                  disabled={loading}
+                >
                   {loading ? (
                     <span className="contact__spinner" />
                   ) : (
-                    <>
-                      <Send size={17} />
-                      Book My Free Demo Class
-                    </>
+                    <><Send size={17} /> Submit Enquiry</>
                   )}
                 </button>
 
                 <p className="contact__disclaimer">
-                  🔒 Your information is 100% safe and will never be shared. No spam, ever.
+                  🔒 Your information is confidential and will only be used to respond to your enquiry.
                 </p>
               </form>
             )}

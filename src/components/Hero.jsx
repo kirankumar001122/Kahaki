@@ -1,4 +1,4 @@
-import { ArrowRight, Play, Star, Users, Award } from 'lucide-react';
+import { ArrowRight, Play, Award, Users } from 'lucide-react';
 import './Hero.css';
 
 export default function Hero() {
@@ -18,53 +18,55 @@ export default function Hero() {
         {/* Content column */}
         <div className="hero__content">
           <div className="badge badge-gold hero__badge">
-            <Star size={12} fill="currentColor" />
-            India's Most Trusted Spoken English Academy
+            KHAKI ACADEMY · ACADEMY OF EXCELLENCE
           </div>
 
           <h1 className="hero__headline">
-            Your English.{' '}
-            <span className="hero__headline-accent">Your Confidence.</span>{' '}
-            Your Future.
+            Learn Today.{' '}
+            <span className="hero__headline-accent">Lead Tomorrow.</span>
           </h1>
 
           <p className="hero__subheadline">
-            Speak English naturally, confidently, and fluently with practical online classes
-            designed for real-life conversations, interviews, and career growth.
+            Khaki Academy — 1st &amp; 2nd PUC Science and Commerce
+          </p>
+
+          <p className="hero__desc">
+            Empowering students and professionals through quality education, effective
+            communication, and practical skills. Malur, Karnataka · Offline &amp; Live Online Programmes.
           </p>
 
           <div className="hero__trust">
-            <span>✓ Practical learning</span>
-            <span>✓ Interactive sessions</span>
-            <span>✓ Confidence-building practice</span>
+            <span>✓ PUC Science &amp; Commerce</span>
+            <span>✓ CET / NEET / JEE Foundation</span>
+            <span>✓ Spoken English &amp; Computer Training</span>
           </div>
 
           <div className="hero__actions">
-            <button className="btn btn-primary btn-lg" onClick={() => scrollTo('contact')}>
-              Book Your Free Demo
+            <button className="btn btn-primary btn-lg" onClick={() => scrollTo('courses')}>
+              Explore Courses
               <ArrowRight size={18} />
             </button>
-            <button className="btn btn-outline btn-lg" onClick={() => scrollTo('courses')}>
+            <button className="btn btn-outline btn-lg" onClick={() => scrollTo('contact')}>
               <Play size={16} fill="currentColor" />
-              Explore Courses
+              Enquire for Admission
             </button>
           </div>
 
-          {/* Stats row */}
+          {/* Info strip — batch timings */}
           <div className="hero__stats">
             <div className="hero__stat">
-              <span className="hero__stat-num">5,000+</span>
-              <span className="hero__stat-label">Students Trained</span>
+              <span className="hero__stat-num">🌅 6–8 AM</span>
+              <span className="hero__stat-label">Morning Batch</span>
             </div>
             <div className="hero__stat-divider"></div>
             <div className="hero__stat">
-              <span className="hero__stat-num">98%</span>
-              <span className="hero__stat-label">Satisfaction Rate</span>
+              <span className="hero__stat-num">🌆 5–9 PM</span>
+              <span className="hero__stat-label">Evening Batch</span>
             </div>
             <div className="hero__stat-divider"></div>
             <div className="hero__stat">
-              <span className="hero__stat-num">8+</span>
-              <span className="hero__stat-label">Expert Trainers</span>
+              <span className="hero__stat-num">📞</span>
+              <span className="hero__stat-label">7338308071</span>
             </div>
           </div>
         </div>
@@ -73,35 +75,36 @@ export default function Hero() {
         <div className="hero__visual">
           <div className="hero__img-frame">
             <img
-              src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=680&q=85&auto=format&fit=crop"
-              alt="Indian students learning spoken English online"
+              src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=680&q=85&auto=format&fit=crop"
+              alt="Students studying in a smart classroom at Khaki Academy Malur"
               className="hero__img"
               loading="eager"
             />
             {/* Floating card 1 */}
             <div className="hero__float hero__float--1">
-              <div className="hero__float-icon"><Award size={18} /></div>
+              <div className="hero__float-icon">
+                <Award size={18} />
+              </div>
               <div>
-                <p className="hero__float-title">Expert Trainers</p>
-                <p className="hero__float-sub">Certified & Experienced</p>
+                <p className="hero__float-title">Expert Faculty</p>
+                <p className="hero__float-sub">Experienced &amp; Dedicated</p>
               </div>
             </div>
             {/* Floating card 2 */}
             <div className="hero__float hero__float--2">
-              <div className="hero__float-icon hero__float-icon--gold"><Users size={18} /></div>
+              <div className="hero__float-icon hero__float-icon--gold">
+                <Users size={18} />
+              </div>
               <div>
-                <p className="hero__float-title">Live Classes</p>
-                <p className="hero__float-sub">Small Batches • Personal Attention</p>
+                <p className="hero__float-title">Limited Batches</p>
+                <p className="hero__float-sub">Personalised Attention</p>
               </div>
             </div>
-            {/* Floating rating */}
+            {/* Contact tag */}
             <div className="hero__rating">
-              <div className="hero__rating-stars">
-                {[1,2,3,4,5].map(i => (
-                  <Star key={i} size={13} fill="#C6A15B" color="#C6A15B" />
-                ))}
-              </div>
-              <p className="hero__rating-text">4.9 / 5 from 1,200+ reviews</p>
+              <span style={{ fontSize: '0.8rem', color: 'var(--text-dark)', fontWeight: 600 }}>
+                📍 Near Railway Station, Malur – 563130
+              </span>
             </div>
           </div>
         </div>

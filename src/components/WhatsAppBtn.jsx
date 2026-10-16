@@ -1,10 +1,12 @@
 import { MessageCircle } from 'lucide-react';
 import './WhatsAppBtn.css';
 
+const WA_NUMBER = '917338308071'; // Confirm if 7338308071 supports WhatsApp
+
 export default function WhatsAppBtn() {
   const openWhatsApp = () => {
-    const msg = encodeURIComponent('Hi Khaki Academy! I want to book a free demo class.');
-    window.open(`https://wa.me/919876543210?text=${msg}`, '_blank');
+    const msg = encodeURIComponent('Hi Khaki Academy! I would like to enquire about admissions and courses.');
+    window.open(`https://wa.me/${WA_NUMBER}?text=${msg}`, '_blank');
   };
 
   return (

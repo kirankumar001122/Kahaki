@@ -1,0 +1,430 @@
+/* ═══════════════════════════════════════════════════════════
+   ACHIEVEMENTS SECTION — Professional Redesign
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Section wrapper ──────────────────────────────────────── */
+.achievements {
+  background: var(--ivory);
+}
+
+/* ── Intro banner ─────────────────────────────────────────── */
+.achievements__banner {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-5);
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--gold);
+  border-radius: var(--radius-xl);
+  padding: var(--space-6) var(--space-8);
+  margin: var(--space-10) auto 0;
+  max-width: 900px;
+  box-shadow: var(--shadow-sm);
+}
+
+.achievements__banner-icon {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-lg);
+  background: rgba(198, 161, 91, 0.12);
+  border: 1px solid rgba(198, 161, 91, 0.28);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gold-dark);
+  margin-top: 2px;
+}
+
+.achievements__banner-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.achievements__banner-headline {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: var(--space-2);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.achievements__banner-text {
+  font-size: 0.9375rem;
+  color: var(--slate);
+  line-height: 1.75;
+  margin: 0;
+}
+
+.achievements__banner-text strong {
+  color: var(--navy);
+  font-weight: 700;
+}
+
+/* ── Gallery Grid ─────────────────────────────────────────── */
+/*
+  5 cards: row 1 = 3 cards, row 2 = 2 cards centred.
+  We achieve the centred 2-card row by making the last two cards
+  span from col 1 and col 2 of a 6-column implicit grid — but the
+  simplest clean approach is a 3-col grid where the last two items
+  are justified via a wrapper trick.
+
+  Instead, we use a 3-col grid and apply auto placement.
+  The 5th card naturally falls into col 1 of row 2.
+  To centre the bottom row (cards 4 & 5), we use an inner
+  flex wrapper for row 2 or accept 3-col with cards left-aligned.
+
+  Cleanest production approach: 3-col grid. The bottom row has
+  cards 4 & 5 in cols 1 & 2, col 3 empty. To visually centre them,
+  we use CSS :nth-child tricks to push card 4 to start at col 1
+  and add an auto spacer. We'll use a simpler approach:
+  grid with justify-items + a pseudo-element spacer on the last row.
+
+  For true simplicity and reliability, use a 3-col grid and
+  let the cards fill naturally. The slight asymmetry on row 2
+  is preferable to layout hacks. Or use the cards-wrapper with
+  flex-wrap at the gallery level.
+
+  FINAL DECISION: Use CSS Grid 3-col for desktop.
+  The 4th and 5th cards will be in cols 1 and 2 of row 2.
+  We nudge the 4th card to start at col 1 and use the :nth-child(4)
+  margin-left: auto trick to shift them toward centre.
+*/
+.achievements__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-6);
+  margin-top: var(--space-10);
+  align-items: start; /* cards don't stretch to match tallest — body text flows naturally */
+}
+
+/* Centre the bottom 2-card row on desktop */
+.achievements__grid .ach-card:nth-child(4) {
+  grid-column: 1;
+}
+
+/* ── Achievement Card ─────────────────────────────────────── */
+.ach-card {
+  background: var(--white);
+  border-radius: var(--radius-2xl);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  cursor: pointer;
+  transition: box-shadow var(--transition-base), transform var(--transition-base), border-color var(--transition-base);
+  display: flex;
+  flex-direction: column;
+}
+
+.ach-card:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-5px);
+  border-color: rgba(198, 161, 91, 0.4);
+}
+
+.ach-card:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+  border-radius: var(--radius-2xl);
+}
+
+/* ── Image container ──────────────────────────────────────── */
+/*
+  ALL cards share the same fixed image height so rows are visually
+  consistent. We use a fixed height rather than aspect-ratio to
+  guarantee uniformity across all 5 image types.
+*/
+.ach-card__img-wrap {
+  position: relative;
+  height: 240px;           /* fixed — keeps all cards aligned */
+  overflow: hidden;
+  background: #f0ede7;     /* neutral warm grey — looks good behind certs */
+  flex-shrink: 0;
+}
+
+.ach-card__img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+/* Photographs & award graphics: cover fills the space cleanly */
+.ach-card__img--photo,
+.ach-card__img--award-graphic {
+  object-fit: cover;
+  object-position: center top;
+}
+
+/*
+  Certificates & documents: contain so all text, seals,
+  signatures, and borders remain fully visible and readable.
+*/
+.ach-card__img--certificate {
+  object-fit: contain;
+  padding: var(--space-3);
+  background: #fafafa;
+}
+
+.ach-card:hover .ach-card__img {
+  transform: scale(1.035);
+}
+
+/* ── Hover overlay ────────────────────────────────────────── */
+.ach-card__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(20, 36, 58, 0.52);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  color: var(--white);
+  opacity: 0;
+  transition: opacity var(--transition-base);
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.ach-card:hover .ach-card__overlay {
+  opacity: 1;
+}
+
+/* ── Card text body ───────────────────────────────────────── */
+.ach-card__body {
+  padding: var(--space-5) var(--space-6) var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  /* No flex:1 — body takes only what its content needs, no stretching */
+}
+
+/* Issuing organisation badge */
+.ach-card__tag {
+  display: inline-block;
+  font-size: 0.73rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gold-dark);
+  background: rgba(198, 161, 91, 0.1);
+  border: 1px solid rgba(198, 161, 91, 0.28);
+  border-radius: var(--radius-full);
+  padding: 0.22rem 0.7rem;
+  align-self: flex-start;
+}
+
+/* Card title */
+.ach-card__title {
+  font-size: 1rem;        /* up from 0.9375 — more readable */
+  font-weight: 700;
+  color: var(--navy);
+  line-height: 1.4;
+  margin: 0;
+}
+
+/* Card caption */
+.ach-card__caption {
+  font-size: 0.875rem;    /* up from 0.825 */
+  color: var(--slate);
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   LIGHTBOX
+   ═══════════════════════════════════════════════════════════ */
+
+.ach-lb {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  background: rgba(8, 15, 28, 0.94);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-5) var(--space-16);
+  backdrop-filter: blur(6px);
+  animation: ach-lb-in 0.2s ease;
+}
+
+@keyframes ach-lb-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.ach-lb__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-5);
+  max-width: 820px;
+  width: 100%;
+  max-height: 94vh;
+  overflow-y: auto;
+}
+
+/* Image frame */
+.ach-lb__img-wrap {
+  background: var(--white);
+  border-radius: var(--radius-xl);
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-3);
+  box-shadow: var(--shadow-xl);
+}
+
+.ach-lb__img {
+  max-width: 100%;
+  max-height: 62vh;
+  object-fit: contain;
+  border-radius: var(--radius-lg);
+  display: block;
+}
+
+/* Caption panel */
+.ach-lb__caption {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-xl);
+  padding: var(--space-6) var(--space-8);
+  width: 100%;
+  text-align: center;
+}
+
+.ach-lb__tag {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--gold-light);
+  margin-bottom: var(--space-3);
+}
+
+.ach-lb__title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: var(--space-3);
+  line-height: 1.35;
+}
+
+.ach-lb__text {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.72);
+  line-height: 1.75;
+  max-width: 620px;
+  margin: 0 auto var(--space-4);
+}
+
+.ach-lb__counter {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.35);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  margin: 0;
+}
+
+/* Close button — fixed top-right */
+.ach-lb__close {
+  position: fixed;
+  top: 1.25rem;
+  right: 1.25rem;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background var(--transition-fast), transform var(--transition-fast);
+  z-index: 9010;
+}
+
+.ach-lb__close:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
+}
+
+/* Prev / Next nav buttons — fixed sides */
+.ach-lb__nav {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background var(--transition-fast), transform var(--transition-fast);
+  z-index: 9010;
+}
+
+.ach-lb__nav:hover {
+  background: rgba(255, 255, 255, 0.22);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.ach-lb__nav--prev { left: 1.25rem; }
+.ach-lb__nav--next { right: 1.25rem; }
+
+/* ═══════════════════════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════════════════════ */
+
+/* Tablet — 2 columns */
+@media (max-width: 1024px) {
+  .achievements__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Reset the nth-child nudge — not needed at 2-col */
+  .achievements__grid .ach-card:nth-child(4) {
+    grid-column: auto;
+  }
+}
+
+/* Large mobile — 2 narrow columns */
+@media (max-width: 640px) {
+  .achievements__grid {
+    grid-template-columns: 1fr;
+    max-width: 420px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .achievements__banner {
+    flex-direction: column;
+    gap: var(--space-4);
+    padding: var(--space-5);
+  }
+
+  .ach-card__img-wrap {
+    height: 200px;
+  }
+
+  /* Lightbox adjustments */
+  .ach-lb {
+    padding: var(--space-4) var(--space-4);
+  }
+
+  .ach-lb__img { max-height: 50vh; }
+  .ach-lb__img-wrap { max-height: 52vh; }
+  .ach-lb__caption { padding: var(--space-4) var(--space-5); }
+  .ach-lb__nav--prev { left: 0.5rem; }
+  .ach-lb__nav--next { right: 0.5rem; }
+  .ach-lb__title { font-size: 1rem; }
+}

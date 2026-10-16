@@ -1,31 +1,27 @@
 import { useState, useEffect } from 'react';
-import { Menu, X, Mic2 } from 'lucide-react';
+import { Menu, X, Mic2, Phone } from 'lucide-react';
 import './Navbar.css';
 
 const NAV_LINKS = [
-  { label: 'Home', href: '#home' },
-  { label: 'About Us', href: '#about' },
-  { label: 'Courses', href: '#courses' },
-  { label: 'Why Khaki', href: '#why' },
-  { label: 'Trainers', href: '#trainers' },
-  { label: 'Testimonials', href: '#testimonials' },
-  { label: 'Contact', href: '#contact' },
+  { label: 'Home',        href: '#home' },
+  { label: 'About Us',    href: '#about' },
+  { label: 'Courses',     href: '#courses' },
+  { label: 'Why Khaki',   href: '#why' },
+  { label: 'Faculty',     href: '#trainers' },
+  { label: 'Contact',     href: '#contact' },
 ];
 
 export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const [scrolled, setScrolled]         = useState(false);
+  const [mobileOpen, setMobileOpen]     = useState(false);
   const [activeSection, setActiveSection] = useState('home');
 
   useEffect(() => {
-    const onScroll = () => {
-      setScrolled(window.scrollY > 40);
-    };
+    const onScroll = () => setScrolled(window.scrollY > 40);
     window.addEventListener('scroll', onScroll);
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  // Active section detection
   useEffect(() => {
     const sectionIds = NAV_LINKS.map((l) => l.href.replace('#', ''));
     const observer = new IntersectionObserver(
@@ -52,6 +48,7 @@ export default function Navbar() {
   return (
     <header className={`navbar ${scrolled ? 'navbar--scrolled' : ''}`}>
       <div className="navbar__inner container">
+
         {/* Logo */}
         <a
           href="#home"
@@ -79,14 +76,17 @@ export default function Navbar() {
           ))}
         </nav>
 
-        {/* CTA */}
+        {/* CTAs */}
         <div className="navbar__cta">
+          <a href="tel:7338308071" className="btn btn-outline navbar__call-btn">
+            <Phone size={15} /> Call Now
+          </a>
           <a
             href="#contact"
             className="btn btn-primary navbar__cta-btn"
             onClick={(e) => { e.preventDefault(); handleNavClick('#contact'); }}
           >
-            Book Free Demo
+            Enquire Now
           </a>
         </div>
 
@@ -113,13 +113,18 @@ export default function Navbar() {
               {link.label}
             </a>
           ))}
-          <a
-            href="#contact"
-            className="btn btn-primary navbar__mobile-cta"
-            onClick={(e) => { e.preventDefault(); handleNavClick('#contact'); }}
-          >
-            Book Free Demo
-          </a>
+          <div className="navbar__mobile-actions">
+            <a href="tel:7338308071" className="btn btn-outline navbar__mobile-call">
+              <Phone size={15} /> Call: 7338308071
+            </a>
+            <a
+              href="#contact"
+              className="btn btn-primary navbar__mobile-cta"
+              onClick={(e) => { e.preventDefault(); handleNavClick('#contact'); }}
+            >
+              Enquire Now
+            </a>
+          </div>
         </nav>
       </div>
     </header>
