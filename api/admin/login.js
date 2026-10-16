@@ -1,7 +1,7 @@
 // POST /api/admin/login
 // Validates admin credentials and returns an HMAC session token.
 // Credentials are never sent back to the client.
-import { ADMIN_PHONE, ADMIN_PASSWORD, makeAdminToken } from './_adminAuth.js'
+import { ADMIN_PHONE, ADMIN_PASSWORD, makeAdminToken } from '../_adminAuth.js'
 
 export default function handler(req, res) {
   // CORS headers (same-origin in production, relaxed for local dev)
