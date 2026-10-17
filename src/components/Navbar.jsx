@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
-import { Menu, X, Mic2, Phone } from 'lucide-react';
+import { Menu, X, Phone } from 'lucide-react';
 import './Navbar.css';
 
 const NAV_LINKS = [
   { label: 'Home',        href: '#home' },
   { label: 'About Us',    href: '#about' },
-  { label: 'Courses',     href: '#courses' },
+  { label: 'All Courses', href: '#courses' },
   { label: 'Why Khaki',   href: '#why' },
   { label: 'Faculty',     href: '#trainers' },
   { label: 'Contact',     href: '#contact' },
@@ -49,17 +49,12 @@ export default function Navbar() {
     <header className={`navbar ${scrolled ? 'navbar--scrolled' : ''}`}>
       <div className="navbar__inner container">
 
-        {/* Logo */}
         <a
           href="#home"
           className="navbar__logo"
           onClick={(e) => { e.preventDefault(); handleNavClick('#home'); }}
         >
-          <span className="navbar__logo-icon"><Mic2 size={22} /></span>
-          <span className="navbar__logo-text">
-            <span className="navbar__logo-khaki">Khaki</span>
-            <span className="navbar__logo-academy"> Academy</span>
-          </span>
+          <img src="/khaki-logo.jpg" alt="Khaki Academy" className="navbar__logo-img" />
         </a>
 
         {/* Desktop Nav */}

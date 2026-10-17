@@ -159,13 +159,18 @@ export default function Contact() {
                   <span className="contact__info-icon"><MapPin size={18} /></span>
                   <div>
                     <p className="contact__info-label">Our Address</p>
-                    <p className="contact__info-value contact__info-address">
-                      Opp. Anjaneyaswamy Temple,<br />
+                    <a
+                      href="https://maps.app.goo.gl/3FeizTNvzi8PYoSr9"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="contact__info-value contact__info-address contact__info-map-link"
+                    >
+                      📍 Opp. Anjaneyaswamy Temple,<br />
                       Above Sowparnika Bakery,<br />
                       Malur to Hosur Road,<br />
                       Near Railway Station,<br />
                       Malur – 563130, Karnataka
-                    </p>
+                    </a>
                   </div>
                 </div>
               </div>
@@ -181,12 +186,8 @@ export default function Contact() {
                 <p className="contact__timings-title">Batch Timings</p>
                 <div className="contact__timings-rows">
                   <div className="contact__timing-row">
-                    <span>🌅 Morning Batch</span>
-                    <span>6:00 AM – 8:00 AM</span>
-                  </div>
-                  <div className="contact__timing-row">
-                    <span>🌆 Evening Batch</span>
-                    <span>5:00 PM – 9:00 PM</span>
+                    <span>🕕 Batch Hours</span>
+                    <span>6:00 AM – 10:00 PM</span>
                   </div>
                 </div>
               </div>
@@ -309,7 +310,7 @@ export default function Contact() {
                     <option value="cet">CET Foundation</option>
                     <option value="neet">NEET Foundation</option>
                     <option value="jee">JEE Foundation</option>
-                    <option value="spoken-english">Spoken English</option>
+                    <option value="spoken-english">Professional Spoken English</option>
                     <option value="computer-training">Computer Training</option>
                     <option value="career-skills">Career &amp; Professional Skills</option>
                     <option value="other">Other / Not Sure</option>

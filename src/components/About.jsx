@@ -46,7 +46,7 @@ export default function About() {
           <div className="about__visual fade-in-left">
             <div className="about__img-wrap">
               <img
-                src="https://images.unsplash.com/photo-1571260899304-425eee4c7efc?w=580&q=85&auto=format&fit=crop"
+                src="/images/up.png"
                 alt="Students learning at Khaki Academy Malur"
                 className="about__img"
                 loading="lazy"

@@ -21,7 +21,7 @@ const COURSE_LABELS = {
   'cet':              'CET Foundation',
   'neet':             'NEET Foundation',
   'jee':              'JEE Foundation',
-  'spoken-english':   'Spoken English',
+  'spoken-english':   'Professional Spoken English',
   'computer-training':'Computer Training',
   'career-skills':    'Career & Professional Skills',
   'other':            'Other / Not Sure',

@@ -27,7 +27,7 @@ export default function Hero() {
           </h1>
 
           <p className="hero__subheadline">
-            Khaki Academy — 1st &amp; 2nd PUC Science and Commerce
+            Khaki Academy
           </p>
 
           <p className="hero__desc">
@@ -38,7 +38,7 @@ export default function Hero() {
           <div className="hero__trust">
             <span>✓ PUC Science &amp; Commerce</span>
             <span>✓ CET / NEET / JEE Foundation</span>
-            <span>✓ Spoken English &amp; Computer Training</span>
+            <span>✓ Professional Spoken English &amp; Computer Training</span>
           </div>
 
           <div className="hero__actions">
@@ -55,13 +55,8 @@ export default function Hero() {
           {/* Info strip — batch timings */}
           <div className="hero__stats">
             <div className="hero__stat">
-              <span className="hero__stat-num">🌅 6–8 AM</span>
-              <span className="hero__stat-label">Morning Batch</span>
-            </div>
-            <div className="hero__stat-divider"></div>
-            <div className="hero__stat">
-              <span className="hero__stat-num">🌆 5–9 PM</span>
-              <span className="hero__stat-label">Evening Batch</span>
+              <span className="hero__stat-num">🕕 6 AM – 10 PM</span>
+              <span className="hero__stat-label">Batch Hours</span>
             </div>
             <div className="hero__stat-divider"></div>
             <div className="hero__stat">
@@ -75,7 +70,7 @@ export default function Hero() {
         <div className="hero__visual">
           <div className="hero__img-frame">
             <img
-              src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=680&q=85&auto=format&fit=crop"
+              src="/images/kak.png"
               alt="Students studying in a smart classroom at Khaki Academy Malur"
               className="hero__img"
               loading="eager"

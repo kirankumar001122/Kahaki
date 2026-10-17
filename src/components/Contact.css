@@ -87,6 +87,15 @@ a.contact__info-value:hover {
   line-height: 1.75;
 }
 
+.contact__info-map-link {
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.contact__info-map-link:hover {
+  color: var(--gold) !important;
+}
+
 /* WhatsApp button */
 .contact__whatsapp-btn {
   display: flex;

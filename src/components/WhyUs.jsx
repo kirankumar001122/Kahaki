@@ -50,7 +50,7 @@ const REASONS = [
 const HIGHLIGHTS = [
   { num: 'School',   label: 'Tuition Classes' },
   { num: 'PUC',      label: 'Science & Commerce' },
-  { num: 'English',  label: 'Spoken English' },
+  { num: 'English',  label: 'Professional Spoken English' },
   { num: 'Computer', label: 'Training' },
   { num: 'CET/NEET', label: 'JEE Foundation' },
   { num: 'Career',   label: 'Professional Skills' },

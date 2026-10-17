@@ -1,113 +1,69 @@
-import { GraduationCap } from 'lucide-react';
 import './Trainers.css';
 
-// Govardhan Krishna confirmed from the poster.
-// Additional faculty cards are clearly marked as content placeholders.
-const FACULTY = [
-  {
-    name: 'Govardhan Krishna',
-    role: 'Founder — Khaki Academy',
-    exp: 'Khaki Academy',
-    speciality: 'Academic Coaching',
-    bio: 'Govardhan Krishna is the founder of Khaki Academy, Malur — an Academy of Excellence committed to empowering students and professionals through quality education, effective communication, and practical skills.',
-    hasPhoto: true,
-    photo: '/images/govardhan-krishna.png',
-  },
-  {
-    name: 'Faculty Member',
-    role: '[Science Faculty — To Be Updated]',
-    exp: 'Science Subjects',
-    speciality: 'Science Coaching',
-    bio: 'Khaki Academy has experienced faculty for Science subjects. Please contact the academy at 7338308071 for details about our Science teaching team.',
-    hasPhoto: false,
-    isPlaceholder: true,
-  },
-  {
-    name: 'Faculty Member',
-    role: '[Commerce Faculty — To Be Updated]',
-    exp: 'Commerce Subjects',
-    speciality: 'Commerce Coaching',
-    bio: 'Khaki Academy has experienced faculty for Commerce subjects. Please contact the academy at 7338308071 for details about our Commerce teaching team.',
-    hasPhoto: false,
-    isPlaceholder: true,
-  },
-];
-
 export default function Trainers() {
+  const scrollTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+
   return (
     <section id="trainers" className="trainers section">
       <div className="container">
         <div className="text-center fade-in">
-          <p className="section-label">Our Faculty</p>
-          <h2 className="section-title">Expert Faculty at Khaki Academy</h2>
-          <p className="section-subtitle">
-            Experienced, dedicated faculty committed to building strong academic foundations
-            and helping every student achieve their educational goals.
-          </p>
+          <p className="section-label">Leadership at Khaki Academy</p>
+          <h2 className="section-title">Meet Our Founder</h2>
         </div>
 
-        <div className="trainers__grid">
-          {FACULTY.map((t, i) => (
-            <div
-              key={i}
-              className="trainer-card fade-in"
-              style={{ transitionDelay: `${i * 0.1}s` }}
-            >
-              <div className="trainer-card__img-wrap">
-                {t.hasPhoto ? (
-                  <img
-                    src={t.photo}
-                    alt="Govardhan Krishna, Founder of Khaki Academy"
-                    className="trainer-card__img"
-                    loading="lazy"
-                  />
-                ) : (
-                  <div className="trainer-card__avatar-placeholder">
-                    <div className="trainer-card__avatar-icon">
-                      <GraduationCap size={36} />
-                    </div>
-                    {t.isPlaceholder && (
-                      <span className="trainer-card__avatar-label">Photo — To Be Updated</span>
-                    )}
-                  </div>
-                )}
-              </div>
-
-              <div className="trainer-card__body">
-                <div className="trainer-card__header">
-                  <div>
-                    <h3 className="trainer-card__name">{t.name}</h3>
-                    <p className="trainer-card__role">{t.role}</p>
-                  </div>
-                </div>
-
-                <div className="trainer-card__tags">
-                  <span className="badge badge-gold">{t.exp}</span>
-                </div>
-
-                <p className="trainer-card__bio">{t.bio}</p>
-
-                {t.isPlaceholder && (
-                  <p className="trainer-card__placeholder-note">
-                    📝 To be updated with verified faculty details.
-                  </p>
-                )}
-
-                <div className="trainer-card__meta">
-                  <div className="trainer-card__meta-item">
-                    <span className="trainer-card__meta-num">{t.speciality.split(' ')[0]}</span>
-                    <span className="trainer-card__meta-label">Speciality</span>
-                  </div>
-                </div>
+        {/* Founder feature layout */}
+        <div className="founder__layout fade-in">
+          {/* Left — Photo Card */}
+          <div className="founder__card">
+            <div className="founder__img-wrap">
+              <img
+                src="/images/govardhan-krishna.png"
+                alt="Govardhan Krishna – Founder & Managing Director, Khaki Academy"
+                className="founder__img"
+                loading="lazy"
+              />
+            </div>
+            <div className="founder__card-footer">
+              <h3 className="founder__card-name">Govardhan Krishna</h3>
+              <p className="founder__card-role">Founder / Managing Director</p>
+              <div className="founder__badges">
+                <span className="badge badge-gold">World-record achiever*</span>
+                <span className="badge badge-gold">English training</span>
               </div>
             </div>
-          ))}
-        </div>
+          </div>
 
-        <p className="trainers__note">
-          * Faculty details based on official academy information. Contact{' '}
-          <a href="tel:7338308071">7338308071</a> for complete faculty information.
-        </p>
+          {/* Right — Bio */}
+          <div className="founder__bio">
+            <p className="section-label">Founder &amp; Managing Director</p>
+            <h2 className="founder__bio-name">Meet Govardhan Krishna</h2>
+
+            <p className="founder__bio-para">
+              Govardhan Krishna is the founder and managing director of Khaki Academy — an Academy of Excellence
+              committed to transforming how students learn and grow. With a deep passion for English communication,
+              academic coaching, and student empowerment, he established Khaki Academy to bridge the gap between
+              classroom learning and real-world application.
+            </p>
+
+            <p className="founder__bio-para">
+              Under his leadership, Khaki Academy brings together expert academic support, professional spoken
+              English training, computer skills, and competitive exam preparation — all under one roof in Malur,
+              Karnataka. His vision is to build confident, capable learners ready to lead their futures.
+            </p>
+
+            <button
+              className="btn btn-primary founder__cta"
+              onClick={() => scrollTo('contact')}
+            >
+              Contact the academy →
+            </button>
+
+            <p className="founder__disclaimer">
+              *Achievement descriptions reflect the academy's own promotional materials. Supporting certificates
+              and record-body details should be displayed if available.
+            </p>
+          </div>
+        </div>
       </div>
     </section>
   );

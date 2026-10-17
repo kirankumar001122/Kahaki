@@ -1,4 +1,4 @@
-import { Mic2, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import './Footer.css';
 
 const PHONE_1   = '7338308071';
@@ -36,11 +36,7 @@ export default function Footer() {
           {/* Brand */}
           <div className="footer__brand">
             <div className="footer__logo">
-              <span className="footer__logo-icon"><Mic2 size={18} /></span>
-              <span className="footer__logo-text">
-                <span className="footer__logo-khaki">Khaki</span>
-                <span className="footer__logo-academy"> Academy</span>
-              </span>
+              <img src="/khaki-logo.jpg" alt="Khaki Academy" className="footer__logo-img" />
             </div>
             <p className="footer__brand-tagline">Learn Today. Lead Tomorrow.</p>
             <p className="footer__brand-desc">
@@ -80,7 +76,7 @@ export default function Footer() {
               {[
                 { label: 'Home',        id: 'home' },
                 { label: 'About Us',    id: 'about' },
-                { label: 'Courses',     id: 'courses' },
+                { label: 'All Courses',     id: 'All  courses' },
                 { label: 'Why Khaki',   id: 'why' },
                 { label: 'Faculty',     id: 'trainers' },
                 { label: 'Admissions',  id: 'contact' },
@@ -104,12 +100,12 @@ export default function Footer() {
                 'CET Foundation',
                 'NEET Foundation',
                 'JEE Foundation',
-                'Spoken English',
+                'Professional Spoken English',
                 'Computer Training',
                 'Career & Professional Skills',
               ].map((l) => (
                 <li key={l}>
-                  <button onClick={() => scrollTo('courses')} className="footer__link">{l}</button>
+                  <button onClick={() => scrollTo('All courses')} className="footer__link">{l}</button>
                 </li>
               ))}
             </ul>
@@ -129,14 +125,17 @@ export default function Footer() {
                 ✉️ <a href={`mailto:${EMAIL}`}>{EMAIL}</a>
               </p>
               <p className="footer__contact-item">
-                🌅 Morning: 6:00 AM – 8:00 AM
+                🕕 Batch Hours: 6:00 AM – 10:00 PM
               </p>
               <p className="footer__contact-item">
-                🌆 Evening: 5:00 PM – 9:00 PM
-              </p>
-              <p className="footer__contact-item">
-                📍 Opp. Anjaneyaswamy Temple, Above Sowparnika Bakery, Malur to Hosur Road,
-                Near Railway Station, Malur – 563130, Karnataka
+                <a
+                  href="https://maps.app.goo.gl/3FeizTNvzi8PYoSr9"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  📍 Opp. Anjaneyaswamy Temple, Above Sowparnika Bakery, Malur to Hosur Road,
+                  Near Railway Station, Malur – 563130, Karnataka
+                </a>
               </p>
             </div>
             <button

@@ -50,26 +50,13 @@
   margin-bottom: var(--space-4);
 }
 
-.footer__logo-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 34px;
-  height: 34px;
-  background: var(--gold);
-  border-radius: var(--radius-md);
-  color: var(--navy);
+.footer__logo-img {
+  height: 80px;
+  width: auto;
+  object-fit: contain;
+  border-radius: var(--radius-sm);
 }
 
-.footer__logo-text {
-  font-family: var(--font-display);
-  font-size: 1.125rem;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-}
-
-.footer__logo-khaki  { color: var(--gold); }
-.footer__logo-academy { color: var(--white); }
 
 .footer__brand-tagline {
   font-size: 0.9rem;

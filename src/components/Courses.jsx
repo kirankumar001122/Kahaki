@@ -3,20 +3,36 @@ import './Courses.css';
 
 const COURSES = [
   {
+    tag: 'English',
+    tagColor: 'gold',
+    level: 'Professional Development',
+    title: 'Professional Spoken English',
+    desc: 'Transform your English communication with our structured, results-driven programme. From building foundational fluency to mastering professional business communication, we cover every aspect of spoken English — pronunciation, grammar, vocabulary, and real-world conversation.',
+    features: [
+      'Level 1: Foundation — Basics & Sentence Building',
+      'Level 2: Intermediate — Confident Conversation',
+      'Level 3: Advanced — Fluency & Expression',
+      'Level 4: Professional — Business & Corporate English',
+      'Pronunciation, Accent & Grammar Mastery',
+      'Interview Preparation & Public Speaking',
+    ],
+    img: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=600&q=90&auto=format&fit=crop',
+  },
+  {
     tag: 'School',
     tagColor: 'gold',
     level: 'Classes 1–10',
     title: 'School Tuition Classes',
-    desc: 'Subject-wise coaching for Karnataka State Board students from Classes 1 to 10, with homework support, chapter-wise assessments, and regular practice.',
+    desc: 'Subject-wise coaching for Karnataka State Board, CBSE, ICSE and other board students from Classes 1 to 10, with homework support, chapter-wise assessments, and regular practice.',
     features: [
-      'Mathematics',
-      'Science',
+      'Karnataka State Board, CBSE & ICSE',
+      'Mathematics & Science',
       'English & Kannada',
       'Social Studies',
       'Homework Support',
       'Regular Assessments',
     ],
-    img: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=420&q=80&auto=format&fit=crop',
+    img: 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=600&q=90&auto=format&fit=crop',
   },
   {
     tag: 'PUC',
@@ -32,23 +48,7 @@ const COURSES = [
       'Chapter-wise Revision',
       'Mock Tests',
     ],
-    img: 'https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=420&q=80&auto=format&fit=crop',
-  },
-  {
-    tag: 'English',
-    tagColor: 'gold',
-    level: 'Communication',
-    title: 'Professional Spoken English',
-    desc: 'Structured Spoken English training across 4 progressive levels — from absolute beginner to advanced — covering fluency, grammar, pronunciation, and everyday communication.',
-    features: [
-      'Level 1: Absolute Beginner',
-      'Level 2: Beginner',
-      'Level 3: Intermediate',
-      'Level 4: Advanced',
-      'Grammar & Vocabulary',
-      'Pronunciation & Fluency',
-    ],
-    img: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=420&q=80&auto=format&fit=crop',
+    img: 'https://images.unsplash.com/photo-1606761568499-6d2451b23c66?w=600&q=90&auto=format&fit=crop',
   },
   {
     tag: 'Computer',
@@ -63,7 +63,7 @@ const COURSES = [
       'Power BI',
       'AI & Digital Literacy Basics',
     ],
-    img: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=420&q=80&auto=format&fit=crop',
+    img: 'https://images.unsplash.com/photo-1571260899304-425eee4c7efc?w=600&q=90&auto=format&fit=crop',
   },
   {
     tag: 'Foundation',
@@ -79,7 +79,7 @@ const COURSES = [
       'Weekend Classes Available',
       'Mock Tests & Revision',
     ],
-    img: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=420&q=80&auto=format&fit=crop',
+    img: 'https://images.unsplash.com/photo-1577896851231-70ef18881754?w=600&q=90&auto=format&fit=crop',
   },
   {
     tag: 'Career',
@@ -94,7 +94,7 @@ const COURSES = [
       'Corporate Communication',
       'Resume Building',
     ],
-    img: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=420&q=80&auto=format&fit=crop',
+    img: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=600&q=90&auto=format&fit=crop',
   },
 ];
 
@@ -107,10 +107,10 @@ export default function Courses() {
     <section id="courses" className="courses section">
       <div className="container">
         <div className="text-center fade-in">
-          <p className="section-label">Our Courses</p>
+          <p className="section-label">All Courses</p>
           <h2 className="section-title">Academic Programmes at Khaki Academy</h2>
           <p className="section-subtitle">
-            Explore academic tuition, Spoken English, computer training, and competitive-exam
+            Explore academic tuition, Professional Spoken English, computer training, and competitive-exam
             foundation programmes. Contact the academy to confirm current schedules and fees.
           </p>
         </div>
