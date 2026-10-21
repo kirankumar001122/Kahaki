@@ -135,13 +135,13 @@
 }
 
 /* ═══════════════════════════════════════════════════════════
-   PHOTO CARDS — single centred card, full image visible
+   PHOTO CARDS — 3-up grid, uniform professional layout
    ═══════════════════════════════════════════════════════════ */
 .achievements__photos {
-  display: flex;
-  justify-content: center;
-  gap: var(--space-8);
-  max-width: 600px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-6);
+  max-width: 960px;
   margin: 0 auto;
 }
 
@@ -153,12 +153,14 @@
   cursor: pointer;
   transition: box-shadow var(--transition-base), transform var(--transition-base), border-color var(--transition-base);
   width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .ach-photo-card:hover {
-  box-shadow: var(--shadow-lg);
-  transform: translateY(-4px);
-  border-color: rgba(198, 161, 91, 0.4);
+  box-shadow: 0 16px 40px rgba(20, 36, 58, 0.13);
+  transform: translateY(-6px);
+  border-color: rgba(198, 161, 91, 0.5);
 }
 
 .ach-photo-card:focus-visible {
@@ -169,34 +171,34 @@
 .ach-photo-card__img-wrap {
   position: relative;
   overflow: hidden;
-  background: #eae6df;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  background: #f0ece6;
+  aspect-ratio: 4 / 5;
 }
 
 .ach-photo-card__img {
   width: 100%;
-  height: auto;
-  object-fit: contain;
+  height: 100%;
+  object-fit: cover;
   display: block;
-  transition: transform 0.45s ease;
+  transition: transform 0.5s ease;
 }
 
 .ach-photo-card:hover .ach-photo-card__img {
-  transform: scale(1.02);
+  transform: scale(1.05);
 }
 
 .ach-photo-card__body {
-  padding: var(--space-5) var(--space-6);
+  padding: var(--space-4) var(--space-5) var(--space-5);
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
   text-align: center;
+  flex: 1;
+  justify-content: center;
 }
 
 .ach-photo-card__title {
-  font-size: 1rem;
+  font-size: 0.92rem;
   font-weight: 700;
   color: var(--navy);
   line-height: 1.4;
@@ -327,7 +329,8 @@
   align-self: flex-start;
 }
 
-.ach-cert-card__body .ach-card__tag {
+.ach-cert-card__body .ach-card__tag,
+.ach-photo-card__body .ach-card__tag {
   align-self: center;
 }
 
@@ -485,6 +488,10 @@
 
 /* Tablet */
 @media (max-width: 1024px) {
+  .achievements__photos {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
   .achievements__certs {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -503,7 +510,8 @@
 /* Large mobile */
 @media (max-width: 640px) {
   .achievements__photos {
-    max-width: 440px;
+    grid-template-columns: 1fr;
+    max-width: 380px;
     margin-left: auto;
     margin-right: auto;
   }

@@ -2,6 +2,8 @@ import react from '@vitejs/plugin-react'
 import { defineConfig, loadEnv } from 'vite'
 import { createClient } from '@supabase/supabase-js'
 import { createHmac }   from 'crypto'
+import publicContentHandler from './api/content.js'
+import adminContentHandler from './api/admin/content.js'
 
 // ── Admin credentials (server-side only — never sent to client) ─
 const ADMIN_PHONE    = '8884176048'
@@ -18,6 +20,49 @@ function isValidAdminToken(req) {
   const auth = req.headers['authorization'] || ''
   const token = auth.replace(/^Bearer\s+/i, '').trim()
   return token === makeAdminToken()
+}
+
+function createApiResponse(res) {
+  return {
+    status(code) {
+      res.statusCode = code
+      return this
+    },
+    json(payload) {
+      res.setHeader('Content-Type', 'application/json')
+      res.end(JSON.stringify(payload))
+    },
+    setHeader(name, value) {
+      res.setHeader(name, value)
+    },
+  }
+}
+
+async function parseJsonBody(req) {
+  if (req.method === 'GET' || req.method === 'DELETE') return {}
+  const raw = await new Promise((resolve, reject) => {
+    let value = ''
+    req.on('data', (chunk) => { value += chunk })
+    req.on('end', () => resolve(value))
+    req.on('error', reject)
+  })
+  return raw ? JSON.parse(raw) : {}
+}
+
+async function runCmsHandler(handler, req, res) {
+  try {
+    const requestUrl = new URL(req.url || '/', 'http://localhost')
+    req.query = Object.fromEntries(requestUrl.searchParams.entries())
+    req.body = await parseJsonBody(req)
+    await handler(req, createApiResponse(res))
+  } catch (error) {
+    console.error('[api] CMS request error:', error.message)
+    if (!res.writableEnded) {
+      res.statusCode = 400
+      res.setHeader('Content-Type', 'application/json')
+      res.end(JSON.stringify({ ok: false, message: 'Invalid CMS request.' }))
+    }
+  }
 }
 
 // ── Validation helpers ─────────────────────────────────────
@@ -73,6 +118,15 @@ function validateEnquiry(body) {
 // Runs inside the Vite dev server — no separate process needed.
 // Env vars from .env.local are loaded by Vite automatically.
 function apiPlugin(env) {
+  // The shared Vercel handlers read server-only credentials from process.env.
+  // Vite's loadEnv returns them separately during local development.
+  if (env.SUPABASE_URL && !process.env.SUPABASE_URL) {
+    process.env.SUPABASE_URL = env.SUPABASE_URL
+  }
+  if (env.SUPABASE_SERVICE_ROLE_KEY && !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    process.env.SUPABASE_SERVICE_ROLE_KEY = env.SUPABASE_SERVICE_ROLE_KEY
+  }
+
   // Initialise Supabase once per server start (not per request)
   let supabase = null
 
@@ -96,6 +150,14 @@ function apiPlugin(env) {
   return {
     name: 'vite-api-middleware',
     configureServer(server) {
+      server.middlewares.use('/api/content', (req, res) => {
+        runCmsHandler(publicContentHandler, req, res)
+      })
+
+      server.middlewares.use('/api/admin/content', (req, res) => {
+        runCmsHandler(adminContentHandler, req, res)
+      })
+
       server.middlewares.use('/api/health', (_req, res) => {
         res.setHeader('Content-Type', 'application/json')
         res.end(JSON.stringify({ ok: true, service: 'khaki-academy-api' }))

@@ -76,7 +76,7 @@ export default function Footer() {
               {[
                 { label: 'Home',        id: 'home' },
                 { label: 'About Us',    id: 'about' },
-                { label: 'All Courses',     id: 'All  courses' },
+                { label: 'All Courses',     id: 'courses' },
                 { label: 'Why Khaki',   id: 'why' },
                 { label: 'Faculty',     id: 'trainers' },
                 { label: 'Admissions',  id: 'contact' },
@@ -100,12 +100,15 @@ export default function Footer() {
                 'CET Foundation',
                 'NEET Foundation',
                 'JEE Foundation',
+                'CA Foundation',
+                'CMA Foundation',
+                'CS Foundation',
                 'Professional Spoken English',
                 'Computer Training',
                 'Career & Professional Skills',
               ].map((l) => (
                 <li key={l}>
-                  <button onClick={() => scrollTo('All courses')} className="footer__link">{l}</button>
+                  <button onClick={() => scrollTo('courses')} className="footer__link">{l}</button>
                 </li>
               ))}
             </ul>

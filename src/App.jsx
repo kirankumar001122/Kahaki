@@ -3,6 +3,7 @@ import Navbar           from './components/Navbar';
 import Hero             from './components/Hero';
 import About            from './components/About';
 import Courses          from './components/Courses';
+import VideoSection     from './components/VideoSection';
 import WhyUs            from './components/WhyUs';
 import Trainers         from './components/Trainers';
 import Achievements     from './components/Achievements';
@@ -47,6 +48,7 @@ function PublicSite() {
         <Hero />
         <About />
         <Courses />
+        <VideoSection />
         <WhyUs />
         <Trainers />
         <Achievements />

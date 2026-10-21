@@ -23,14 +23,7 @@ export default function Trainers() {
                 loading="lazy"
               />
             </div>
-            <div className="founder__card-footer">
-              <h3 className="founder__card-name">Govardhan Krishna</h3>
-              <p className="founder__card-role">Founder / Managing Director</p>
-              <div className="founder__badges">
-                <span className="badge badge-gold">World-record achiever*</span>
-                <span className="badge badge-gold">English training</span>
-              </div>
-            </div>
+
           </div>
 
           {/* Right — Bio */}

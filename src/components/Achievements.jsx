@@ -7,13 +7,29 @@ import './Achievements.css';
  * Captions are based on text visible in the images themselves.
  */
 const ACHIEVEMENTS = [
-  /* ── Photo ───────────────────────────────────────────────── */
+  /* ── Photos ──────────────────────────────────────────────── */
   {
     img: '/images/cert-govardhan.jpg',
     tag: 'World Record Achievement',
-    title: 'Govardhan Krishna — World Record Holder',
+    title: 'World Record Certificate & Trophy',
     caption:
       'Govardhan Krishna holding his world record certificate and trophy, certified for writing 7,000 English Grammar Formulae in 4 hours 55 minutes and 02 seconds at Government First Grade College, Malur on 20 February 2023.',
+    type: 'photo',
+  },
+  {
+    img: '/images/Gov2.jpeg',
+    tag: "Kalam's World Records",
+    title: 'Congratulations Record Holder 2023',
+    caption:
+      "Govardhan Krishna recognised by Kalam's World Records as a certified Record Holder for 2023 — celebrating an extraordinary achievement in English Grammar.",
+    type: 'photo',
+  },
+  {
+    img: '/images/Gov3.JPG',
+    tag: "Kalam's World Records",
+    title: 'Official Record Holder Recognition',
+    caption:
+      'Govardhan KR officially recognised for writing 7,000 English Grammar Formulae in 4 hours 55 minutes and 02 seconds — a proud moment of excellence.',
     type: 'photo',
   },
   /* ── Certificates ────────────────────────────────────────── */
@@ -160,7 +176,7 @@ export default function Achievements() {
             </div>
           </div>
 
-          {/* ── Photo highlights (2 photos side by side) ────────── */}
+          {/* ── Photo highlights (3 photos) ─────────────────────── */}
           <h3 className="achievements__group-title fade-in">
             <Trophy size={18} /> Award Ceremony Highlights
           </h3>

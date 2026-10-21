@@ -4,6 +4,7 @@ import {
   Phone, Mail, BookOpen, Monitor, ChevronDown, ChevronUp, X
 } from 'lucide-react';
 import './AdminDashboard.css';
+import ContentManager from './ContentManager';
 
 const STATUS_LABELS = {
   new:          { label: 'New',          color: 'status--new' },
@@ -122,6 +123,7 @@ export default function AdminDashboard({ token, onLogout }) {
   const [filterStatus, setFilterStatus] = useState('');
   const [filterCourse, setFilterCourse] = useState('');
   const [expandedId, setExpandedId]     = useState(null);
+  const [view, setView] = useState('enquiries');
 
   const fetchEnquiries = useCallback(async () => {
     setLoading(true);
@@ -186,6 +188,16 @@ export default function AdminDashboard({ token, onLogout }) {
       </header>
 
       <main className="dash-main">
+        <div className="dash-nav" role="navigation" aria-label="Admin sections">
+          <button className={view === 'enquiries' ? 'is-active' : ''} onClick={() => setView('enquiries')}>
+            <Users size={15} /> Admissions Enquiries
+          </button>
+          <button className={view === 'content' ? 'is-active' : ''} onClick={() => setView('content')}>
+            <BookOpen size={15} /> Website Content
+          </button>
+        </div>
+        {view === 'content' ? <ContentManager token={token} /> : (
+          <>
         {/* Stat cards */}
         <div className="dash-stats">
           <StatCard icon={Users}       label="Total Enquiries"  value={total}     accent="dash-stat--navy" />
@@ -270,6 +282,8 @@ export default function AdminDashboard({ token, onLogout }) {
               </tbody>
             </table>
           </div>
+        )}
+          </>
         )}
       </main>
     </div>

@@ -1,7 +1,10 @@
 import { ArrowRight, Play, Award, Users } from 'lucide-react';
 import './Hero.css';
+import { findPublishedSection, usePublishedContent } from '../hooks/usePublishedContent';
 
 export default function Hero() {
+  const { sections } = usePublishedContent();
+  const content = findPublishedSection(sections, 'home', 'hero');
   const scrollTo = (id) => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -22,17 +25,15 @@ export default function Hero() {
           </div>
 
           <h1 className="hero__headline">
-            Learn Today.{' '}
-            <span className="hero__headline-accent">Lead Tomorrow.</span>
+            {content?.title || 'Learn Today. Lead Tomorrow.'}
           </h1>
 
           <p className="hero__subheadline">
-            Khaki Academy
+            {content?.subtitle || 'Khaki Academy'}
           </p>
 
           <p className="hero__desc">
-            Empowering students and professionals through quality education, effective
-            communication, and practical skills. Malur, Karnataka · Offline &amp; Live Online Programmes.
+            {content?.body || 'Empowering students and professionals through quality education, effective communication, and practical skills. Malur, Karnataka · Offline & Live Online Programmes.'}
           </p>
 
           <div className="hero__trust">
@@ -70,8 +71,8 @@ export default function Hero() {
         <div className="hero__visual">
           <div className="hero__img-frame">
             <img
-              src="/images/kak.png"
-              alt="Students studying in a smart classroom at Khaki Academy Malur"
+              src={content?.image_url || '/images/kak.png'}
+              alt={content?.image_alt || 'Students studying in a smart classroom at Khaki Academy Malur'}
               className="hero__img"
               loading="eager"
             />
