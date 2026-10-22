@@ -10,7 +10,13 @@ const COURSES = [
     level: '',
     title: 'Professional Spoken English',
     desc: 'Absolute Beginner to Advanced levels. American & British Accents. Fluent & Grammatically Correct.',
-    features: [],
+    features: [
+      'Speaking and conversation practice',
+      'Grammar and vocabulary development',
+      'Pronunciation and confidence building',
+      'Interview preparation and communication skills',
+      'Public speaking and presentation skills',
+    ],
     img: '/images/academic-programme-1.png',
   },
   {
@@ -67,6 +73,36 @@ const COURSES = [
   },
 ];
 
+const COURSE_HIGHLIGHTS = {
+  'professional spoken english': [
+    'Speaking and conversation practice',
+    'Grammar and vocabulary development',
+    'Pronunciation and confidence building',
+    'Interview preparation and communication skills',
+    'Public speaking and presentation skills',
+  ],
+  'computer training': [
+    'Computer fundamentals and digital literacy',
+    'Practical productivity tools such as MS Office',
+    'Hands-on computer exercises',
+  ],
+  'school tuition': [
+    'Subject-wise learning and homework support',
+    'Chapter-wise practice and assessment',
+    'Regular revision and academic guidance',
+  ],
+  '1st & 2nd puc': [
+    'Science and Commerce subject learning',
+    'Board examination preparation',
+    'Concept clarification and subject practice',
+  ],
+  'cet, neet & jee foundation': [
+    'Competitive-exam foundation learning',
+    'Conceptual understanding and problem-solving',
+    'Subject-wise preparation and revision',
+  ],
+};
+
 export default function Courses() {
   const { courses: publishedCourses } = usePublishedContent();
   const courses = useMemo(() => {
@@ -77,7 +113,9 @@ export default function Courses() {
       level: course.duration || '',
       title: course.title,
       desc: course.short_description || course.detailed_description,
-      features: course.highlights || [],
+      features: course.highlights?.length
+        ? course.highlights
+        : COURSE_HIGHLIGHTS[course.title.trim().toLowerCase()] || [],
       img: course.image_url || '/images/academic-programme-1.png',
     }));
   }, [publishedCourses]);

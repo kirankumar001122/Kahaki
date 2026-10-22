@@ -9,7 +9,7 @@ import './Achievements.css';
 const ACHIEVEMENTS = [
   /* ── Photos ──────────────────────────────────────────────── */
   {
-    img: '/images/cert-govardhan.jpg',
+    img: '/images/Gov.jpeg',
     tag: 'World Record Achievement',
     title: 'World Record Certificate & Trophy',
     caption:
@@ -71,6 +71,14 @@ const ACHIEVEMENTS = [
     title: 'Maximum English Grammar Formula Written',
     caption:
       'America Book of Records certified Govardhan K R (Founder of Khaki Academy, Malur) from Karnataka, India for writing 7,000 English Grammar Formulae in 4 hours 55 minutes 2 seconds on 20 February 2023 at Government First Grade College, Malur, Bengaluru. Certificate dated June 20, 2023.',
+    type: 'certificate',
+  },
+  {
+    img: '/images/cert-govardhan2.jpg',
+    tag: 'World Record Achievement',
+    title: 'World Record Certificate & Trophy',
+    caption:
+      'Govardhan Krishna holding his High Range Book of World Records certificate and trophy for writing 7,000 English Grammar Formulae in 4 hours 55 minutes and 02 seconds.',
     type: 'certificate',
   },
 ];
@@ -143,7 +151,7 @@ export default function Achievements() {
             <div className="achievements__stat">
               <Award size={22} />
               <div>
-                <span className="achievements__stat-number">5</span>
+                <span className="achievements__stat-number">{certificates.length}</span>
                 <span className="achievements__stat-label">World Record Certifications</span>
               </div>
             </div>
