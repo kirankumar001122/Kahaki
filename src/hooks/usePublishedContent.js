@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 export function usePublishedContent() {
-  const [content, setContent] = useState({ sections: [], courses: [], videos: [], testimonials: [] });
+  const [content, setContent] = useState({ sections: [], courses: [], videos: [], testimonials: [], faculty: [] });
 
   useEffect(() => {
     let active = true;
@@ -13,6 +13,7 @@ export function usePublishedContent() {
           courses: Array.isArray(json.courses) ? json.courses : [],
           videos: Array.isArray(json.videos) ? json.videos : [],
           testimonials: Array.isArray(json.testimonials) ? json.testimonials : [],
+          faculty: Array.isArray(json.faculty) ? json.faculty : [],
         });
       })
       .catch(() => {

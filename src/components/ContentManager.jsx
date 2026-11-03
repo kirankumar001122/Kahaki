@@ -23,6 +23,20 @@ const EMPTY_TESTIMONIAL = {
   reviewer_name: '', review_text: '', rating: 5, course_label: '',
   google_url: 'https://maps.app.goo.gl/3FeizTNvzi8PYoSr9', status: 'draft', display_order: 0,
 };
+const EMPTY_FACULTY = {
+  full_name: '', photograph: '', designation: '', institution: '',
+  qualifications: '', specialisations: '', experience_years: 0,
+  professional_profile: '', teaching_methodology: '', additional_achievements: '',
+  status: 'draft', display_order: 0,
+};
+
+function emptyForm(resource) {
+  return resource === 'courses' ? EMPTY_COURSE
+    : resource === 'sections' ? EMPTY_SECTION
+      : resource === 'videos' ? EMPTY_VIDEO
+        : resource === 'testimonials' ? EMPTY_TESTIMONIAL
+          : EMPTY_FACULTY;
+}
 
 function ContentManager({ token }) {
   const [tab, setTab] = useState('courses');
@@ -55,7 +69,7 @@ function ContentManager({ token }) {
 
   const startNew = () => {
     setEditing(null);
-    setForm(tab === 'courses' ? EMPTY_COURSE : tab === 'sections' ? EMPTY_SECTION : tab === 'videos' ? EMPTY_VIDEO : EMPTY_TESTIMONIAL);
+    setForm(emptyForm(tab));
     setMessage('');
     setError('');
   };
@@ -64,7 +78,9 @@ function ContentManager({ token }) {
     setEditing(item.id);
     setForm(tab === 'courses'
       ? { ...item, highlights: (item.highlights || []).join('\n') }
-      : { ...item });
+      : tab === 'faculty'
+        ? { ...item, qualifications: (item.qualifications || []).join('\n'), specialisations: (item.specialisations || []).join('\n') }
+        : { ...item });
     setMessage('');
     setError('');
   };
@@ -81,6 +97,10 @@ function ContentManager({ token }) {
     setMessage('');
     const payload = { ...form };
     if (tab === 'courses') payload.highlights = form.highlights.split('\n').map((value) => value.trim()).filter(Boolean);
+    if (tab === 'faculty') {
+      payload.qualifications = form.qualifications.split('\n').map((value) => value.trim()).filter(Boolean);
+      payload.specialisations = form.specialisations.split('\n').map((value) => value.trim()).filter(Boolean);
+    }
     if (editing) payload.id = editing;
     try {
       const response = await fetch(`/api/admin/content?resource=${tab}`, {
@@ -90,7 +110,7 @@ function ContentManager({ token }) {
       });
       const json = await response.json();
       if (!response.ok || !json.ok) throw new Error(json.message || 'Unable to save content.');
-      setMessage(`${tab === 'courses' ? 'Course' : tab === 'sections' ? 'Section' : tab === 'videos' ? 'Video' : 'Testimonial'} saved.`);
+      setMessage(`${tab === 'courses' ? 'Course' : tab === 'sections' ? 'Section' : tab === 'videos' ? 'Video' : tab === 'testimonials' ? 'Testimonial' : 'Faculty profile'} saved.`);
       startNew();
       await load();
     } catch (err) {
@@ -143,8 +163,9 @@ function ContentManager({ token }) {
           ['sections', 'Page sections'],
           ['videos', 'Videos'],
           ['testimonials', 'Testimonials'],
+          ['faculty', 'Teaching staff'],
         ].map(([value, label]) => (
-          <button key={value} className={tab === value ? 'is-active' : ''} onClick={() => { setTab(value); setForm(value === 'courses' ? EMPTY_COURSE : value === 'sections' ? EMPTY_SECTION : value === 'videos' ? EMPTY_VIDEO : EMPTY_TESTIMONIAL); setEditing(null); }}>
+          <button key={value} className={tab === value ? 'is-active' : ''} onClick={() => { setTab(value); setForm(emptyForm(value)); setEditing(null); }}>
             {value === 'videos' ? <Video size={15} /> : <Edit3 size={15} />}{label}
           </button>
         ))}
@@ -188,6 +209,16 @@ function ContentManager({ token }) {
               <div className="content-form-grid">{renderField('rating', 'Star rating', { type: 'number' })}{renderField('google_url', 'Google listing URL')}</div>
             </>
           )}
+          {tab === 'faculty' && (
+            <>
+              <div className="content-form-grid">{renderField('full_name', 'Full name', { required: true })}{renderField('designation', 'Designation', { required: true })}{renderField('institution', 'Institution')}{renderField('photograph', 'Photograph URL')}</div>
+              {renderField('qualifications', 'Qualifications (one per line)', { textarea: true, rows: 4 })}
+              {renderField('specialisations', 'Subject specialisations (one per line)', { textarea: true, rows: 4 })}
+              <div className="content-form-grid">{renderField('experience_years', 'Years of teaching experience', { type: 'number' })}{renderField('additional_achievements', 'Additional achievements', { textarea: true, rows: 3 })}</div>
+              {renderField('professional_profile', 'Professional profile', { textarea: true, rows: 6 })}
+              {renderField('teaching_methodology', 'Teaching methodology', { textarea: true, rows: 6 })}
+            </>
+          )}
           <div className="content-form-grid content-form-grid--small">
             <label className="content-field"><span>Status</span><select name="status" value={form.status} onChange={updateField}><option value="draft">Draft</option><option value="published">Published</option></select></label>
             {renderField('display_order', 'Display order', { type: 'number' })}
@@ -196,18 +227,24 @@ function ContentManager({ token }) {
         </form>
 
         <div className="content-list">
-          <div className="content-list__header">          <h3>{tab === 'courses' ? 'Courses' : tab === 'sections' ? 'Sections' : tab === 'videos' ? 'Videos' : 'Testimonials'}</h3><button className="content-icon-btn" onClick={load} aria-label="Refresh"><Upload size={16} /></button></div>
+          <div className="content-list__header">          <h3>{tab === 'courses' ? 'Courses' : tab === 'sections' ? 'Sections' : tab === 'videos' ? 'Videos' : tab === 'testimonials' ? 'Testimonials' : 'Teaching staff'}</h3><button className="content-icon-btn" onClick={load} aria-label="Refresh"><Upload size={16} /></button></div>
           {loading && <p className="content-state">Loading…</p>}
           {!loading && items.length === 0 && <p className="content-state">No items yet. Create your first draft.</p>}
           {!loading && items.map((item) => (
             <article className="content-list__item" key={item.id}>
-              <div><strong>{item.title || `${item.page_key} / ${item.section_key}`}</strong><span>{item.status} · order {item.display_order}</span></div>
+              <div><strong>{item.title || item.full_name || `${item.page_key} / ${item.section_key}`}</strong><span>{item.status} · order {item.display_order}</span></div>
               <div className="content-list__actions"><button className="content-icon-btn" onClick={() => editItem(item)} aria-label="Edit"><Edit3 size={15} /></button><button className="content-icon-btn content-icon-btn--danger" onClick={() => remove(item.id)} aria-label="Delete"><Trash2 size={15} /></button></div>
             </article>
           ))}
         </div>
       </div>
-      <MediaUploader token={token} onUse={(url) => setForm((previous) => ({ ...previous, image_url: url }))} />
+      <MediaUploader
+        token={token}
+        onUse={(url) => setForm((previous) => ({
+          ...previous,
+          [tab === 'faculty' ? 'photograph' : 'image_url']: url,
+        }))}
+      />
     </section>
   );
 }

@@ -17,7 +17,7 @@ const COURSES = [
       'Interview preparation and communication skills',
       'Public speaking and presentation skills',
     ],
-    img: '/images/academic-programme-1.png',
+    img: '/images/professional-spoken-english.png',
   },
   {
     tag: 'Computer',
@@ -30,7 +30,7 @@ const COURSES = [
       'Python | Power BI | Typing',
       'Practical & Career-Focused',
     ],
-    img: '/images/academic-programme-2.png',
+    img: '/images/computer-training-lab.png',
   },
   {
     tag: 'School',
@@ -116,7 +116,11 @@ export default function Courses() {
       features: course.highlights?.length
         ? course.highlights
         : COURSE_HIGHLIGHTS[course.title.trim().toLowerCase()] || [],
-      img: course.image_url || '/images/academic-programme-1.png',
+      img: course.title.trim().toLowerCase() === 'professional spoken english'
+        ? '/images/professional-spoken-english.png'
+        : course.title.trim().toLowerCase() === 'computer training'
+          ? '/images/computer-training-lab.png'
+          : course.image_url || '/images/academic-programme-1.png',
     }));
   }, [publishedCourses]);
 

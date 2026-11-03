@@ -6,6 +6,7 @@ import Courses          from './components/Courses';
 import VideoSection     from './components/VideoSection';
 import WhyUs            from './components/WhyUs';
 import Trainers         from './components/Trainers';
+import TeachingStaff    from './components/TeachingStaff';
 import Achievements     from './components/Achievements';
 import Testimonials     from './components/Testimonials';
 import Contact          from './components/Contact';
@@ -51,6 +52,7 @@ function PublicSite() {
         <VideoSection />
         <WhyUs />
         <Trainers />
+        <TeachingStaff />
         <Achievements />
         <Testimonials />
         <Contact />

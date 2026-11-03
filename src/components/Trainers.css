@@ -12,6 +12,12 @@
   margin-top: var(--space-10);
 }
 
+.founder__layout--cofounder {
+  margin-top: var(--space-12);
+  padding-top: var(--space-12);
+  border-top: 1px solid var(--border);
+}
+
 /* Left card */
 .founder__card {
   background: linear-gradient(160deg, var(--navy) 0%, #1e3a5f 100%);
@@ -86,11 +92,69 @@
   line-height: 1.15;
 }
 
+.founder__bio-organization {
+  color: var(--gold-dark);
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  margin-top: calc(var(--space-5) * -1);
+  margin-bottom: var(--space-6);
+}
+
+.founder__bio-heading {
+  color: var(--navy);
+  font-size: 1rem;
+  font-weight: 800;
+  margin-top: var(--space-6);
+  margin-bottom: var(--space-2);
+}
+
 .founder__bio-para {
   font-size: 1rem;
   color: var(--slate);
   line-height: 1.75;
   margin-bottom: var(--space-5);
+}
+
+.founder__focus-list {
+  display: grid;
+  gap: var(--space-2);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  color: var(--slate);
+  line-height: 1.5;
+}
+
+.founder__focus-list li {
+  position: relative;
+  padding-left: 1.25rem;
+}
+
+.founder__focus-list li::before {
+  color: var(--gold-dark);
+  content: '•';
+  font-weight: 900;
+  left: 0;
+  position: absolute;
+}
+
+.founder__vision {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-sm);
+  margin-top: var(--space-12);
+  padding: var(--space-8) var(--space-10);
+}
+
+.founder__vision .founder__bio-name {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  margin-bottom: var(--space-4);
+}
+
+.founder__vision .founder__bio-para {
+  margin-bottom: var(--space-4);
 }
 
 .founder__cta {
@@ -116,5 +180,9 @@
   .founder__card {
     max-width: 360px;
     margin: 0 auto;
+  }
+
+  .founder__vision {
+    padding: var(--space-6);
   }
 }

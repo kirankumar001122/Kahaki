@@ -7,14 +7,15 @@ export default async function handler(req, res) {
   const supabase = getSupabase()
   if (!supabase) return sendError(res, 503, 'Content service is not configured.')
 
-  const [sections, courses, videos, testimonials] = await Promise.all([
+  const [sections, courses, videos, testimonials, faculty] = await Promise.all([
     supabase.from('website_sections').select('*').eq('status', 'published').order('display_order'),
     supabase.from('courses').select('*').eq('status', 'published').order('display_order'),
     supabase.from('website_videos').select('*').eq('status', 'published').order('display_order'),
     supabase.from('testimonials').select('*').eq('status', 'published').order('display_order'),
+    supabase.from('faculty').select('*').eq('status', 'published').order('display_order'),
   ])
 
-  const failure = sections.error || courses.error || videos.error || testimonials.error
+  const failure = sections.error || courses.error || videos.error || testimonials.error || faculty.error
   if (failure) {
     console.error('[content] Public content fetch error:', failure.message)
     return sendError(res, 500, 'Failed to load published website content.')
@@ -26,5 +27,6 @@ export default async function handler(req, res) {
     courses: courses.data || [],
     videos: videos.data || [],
     testimonials: testimonials.data || [],
+    faculty: faculty.data || [],
   })
 }

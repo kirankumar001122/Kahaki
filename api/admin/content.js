@@ -7,6 +7,7 @@ const TABLES = {
   courses: 'courses',
   videos: 'website_videos',
   testimonials: 'testimonials',
+  faculty: 'faculty',
   media: 'media_assets',
 }
 const MAX_IMAGE_BYTES = 5 * 1024 * 1024
@@ -17,6 +18,12 @@ function text(value, max = 10000) {
 
 function status(value) {
   return value === 'published' ? 'published' : 'draft'
+}
+
+function textList(value, maxItems = 20, maxLength = 500) {
+  return Array.isArray(value)
+    ? value.map((item) => text(item, maxLength)).filter(Boolean).slice(0, maxItems)
+    : []
 }
 
 function parseVideo(url) {
@@ -88,6 +95,25 @@ function cleanPayload(resource, body) {
       if (parsed.protocol !== 'https:' || !parsed.hostname.endsWith('google.com') && !parsed.hostname.endsWith('goo.gl')) throw new Error()
     } catch {
       throw new Error('Google URL must be a valid secure Google Maps link.')
+    }
+    if (resource === 'faculty') {
+      const fullName = text(body.full_name, 160)
+      const designation = text(body.designation, 300)
+      if (!fullName || !designation) throw new Error('Name and designation are required.')
+      return {
+        full_name: fullName,
+        photograph: text(body.photograph, 2000),
+        designation,
+        institution: text(body.institution, 240),
+        qualifications: textList(body.qualifications, 20, 160),
+        specialisations: textList(body.specialisations, 20, 500),
+        experience_years: Math.max(0, Number(body.experience_years) || 0),
+        professional_profile: text(body.professional_profile, 12000),
+        teaching_methodology: text(body.teaching_methodology, 12000),
+        additional_achievements: text(body.additional_achievements, 4000),
+        status: status(body.status),
+        display_order: Number(body.display_order) || 0,
+      }
     }
     return {
       reviewer_name: reviewerName, review_text: reviewText, rating,

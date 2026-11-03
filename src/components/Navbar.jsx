@@ -7,7 +7,7 @@ const NAV_LINKS = [
   { label: 'About Us',    href: '#about' },
   { label: 'All Courses', href: '#courses' },
   { label: 'Why Khaki',   href: '#why' },
-  { label: 'Faculty',     href: '#trainers' },
+  { label: 'Teaching Staff', href: '#teaching-staff' },
   { label: 'Contact',     href: '#contact' },
 ];
 

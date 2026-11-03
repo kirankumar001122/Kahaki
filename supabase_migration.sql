@@ -156,6 +156,24 @@ create table if not exists public.testimonials (
   updated_at          timestamptz not null default now()
 );
 
+create table if not exists public.faculty (
+  id                    uuid primary key default gen_random_uuid(),
+  full_name             text not null,
+  photograph            text,
+  designation           text not null,
+  institution           text,
+  qualifications        text[] not null default '{}',
+  specialisations       text[] not null default '{}',
+  experience_years      integer not null default 0 check (experience_years >= 0),
+  professional_profile  text not null default '',
+  teaching_methodology  text not null default '',
+  additional_achievements text not null default '',
+  status                text not null default 'draft' check (status in ('draft', 'published')),
+  display_order         integer not null default 0,
+  created_at            timestamptz not null default now(),
+  updated_at            timestamptz not null default now()
+);
+
 create index if not exists idx_website_sections_published
   on public.website_sections (page_key, status, display_order);
 create index if not exists idx_courses_published
@@ -164,6 +182,8 @@ create index if not exists idx_website_videos_published
   on public.website_videos (status, display_order);
 create index if not exists idx_testimonials_published
   on public.testimonials (status, display_order);
+create index if not exists idx_faculty_published
+  on public.faculty (status, display_order);
 
 drop trigger if exists set_updated_at_website_sections on public.website_sections;
 create trigger set_updated_at_website_sections before update on public.website_sections
@@ -177,12 +197,16 @@ create trigger set_updated_at_website_videos before update on public.website_vid
 drop trigger if exists set_updated_at_testimonials on public.testimonials;
 create trigger set_updated_at_testimonials before update on public.testimonials
   for each row execute function public.set_updated_at();
+drop trigger if exists set_updated_at_faculty on public.faculty;
+create trigger set_updated_at_faculty before update on public.faculty
+  for each row execute function public.set_updated_at();
 
 alter table public.website_sections enable row level security;
 alter table public.media_assets enable row level security;
 alter table public.courses enable row level security;
 alter table public.website_videos enable row level security;
 alter table public.testimonials enable row level security;
+alter table public.faculty enable row level security;
 
 drop policy if exists "Public can read published sections" on public.website_sections;
 create policy "Public can read published sections" on public.website_sections
@@ -199,9 +223,12 @@ create policy "Public can read published videos" on public.website_videos
 drop policy if exists "Public can read published testimonials" on public.testimonials;
 create policy "Public can read published testimonials" on public.testimonials
   for select using (status = 'published');
+drop policy if exists "Public can read published faculty" on public.faculty;
+create policy "Public can read published faculty" on public.faculty
+  for select using (status = 'published');
 
-grant select on public.website_sections, public.media_assets, public.courses, public.website_videos, public.testimonials to anon, authenticated;
-grant all on public.website_sections, public.media_assets, public.courses, public.website_videos, public.testimonials to service_role;
+grant select on public.website_sections, public.media_assets, public.courses, public.website_videos, public.testimonials, public.faculty to anon, authenticated;
+grant all on public.website_sections, public.media_assets, public.courses, public.website_videos, public.testimonials, public.faculty to service_role;
 
 insert into storage.buckets (id, name, public)
 values ('website-media', 'website-media', true)
