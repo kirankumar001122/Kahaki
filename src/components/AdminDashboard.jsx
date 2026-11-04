@@ -115,7 +115,7 @@ function EnquiryRow({ row, expanded, onToggle }) {
   );
 }
 
-export default function AdminDashboard({ token, onLogout }) {
+export default function AdminDashboard({ onLogout }) {
   const [enquiries, setEnquiries] = useState([]);
   const [loading, setLoading]     = useState(true);
   const [error, setError]         = useState('');
@@ -130,7 +130,7 @@ export default function AdminDashboard({ token, onLogout }) {
     setError('');
     try {
       const res  = await fetch('/api/admin/enquiries', {
-        headers: { 'Authorization': `Bearer ${token}` },
+        credentials: 'same-origin',
       });
       const json = await res.json();
       if (res.ok && json.ok) {
@@ -145,7 +145,7 @@ export default function AdminDashboard({ token, onLogout }) {
     } finally {
       setLoading(false);
     }
-  }, [token, onLogout]);
+  }, [onLogout]);
 
   useEffect(() => { fetchEnquiries(); }, [fetchEnquiries]);
 
@@ -196,7 +196,7 @@ export default function AdminDashboard({ token, onLogout }) {
             <BookOpen size={15} /> Website Content
           </button>
         </div>
-        {view === 'content' ? <ContentManager token={token} /> : (
+        {view === 'content' ? <ContentManager /> : (
           <>
         {/* Stat cards */}
         <div className="dash-stats">

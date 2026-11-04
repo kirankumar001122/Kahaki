@@ -29,8 +29,8 @@ export default function AdminLogin({ onLogin }) {
       });
       const json = await res.json();
       if (res.ok && json.ok) {
-        sessionStorage.setItem('ka_admin_token', json.token);
-        onLogin(json.token);
+        sessionStorage.setItem('ka_admin_authenticated', '1');
+        onLogin();
       } else {
         setError(json.message || 'Login failed. Please try again.');
       }

@@ -1,5 +1,5 @@
 import { randomUUID } from 'crypto'
-import { isValidAdminToken } from '../_adminAuth.js'
+import { isAdminAuthConfigured, isCsrfProtectedRequest, isValidAdminToken } from '../_adminAuth.js'
 import { getSupabase, sendError } from '../_supabase.js'
 
 const TABLES = {
@@ -11,6 +11,16 @@ const TABLES = {
   media: 'media_assets',
 }
 const MAX_IMAGE_BYTES = 5 * 1024 * 1024
+
+function logSupabaseError(operation, resource, error) {
+  console.error(`[admin/content] ${operation} failed`, {
+    resource,
+    code: error?.code || 'unknown',
+    message: error?.message || 'Unknown Supabase error',
+    details: error?.details || '',
+    hint: error?.hint || '',
+  })
+}
 
 function text(value, max = 10000) {
   return typeof value === 'string' ? value.trim().slice(0, max) : ''
@@ -83,6 +93,25 @@ function cleanPayload(resource, body) {
     if (!title || !parsed) throw new Error('A title and valid YouTube or Vimeo URL are required.')
     return { title, description: text(body.description, 4000), ...parsed, thumbnail_url: text(body.thumbnail_url, 2000), status: status(body.status), display_order: Number(body.display_order) || 0 }
   }
+  if (resource === 'faculty') {
+    const fullName = text(body.full_name, 160)
+    const designation = text(body.designation, 300)
+    if (!fullName || !designation) throw new Error('Name and designation are required.')
+    return {
+      full_name: fullName,
+      photograph: text(body.photograph, 2000),
+      designation,
+      institution: text(body.institution, 240),
+      qualifications: textList(body.qualifications, 20, 160),
+      specialisations: textList(body.specialisations, 20, 500),
+      experience_years: Math.max(0, Number(body.experience_years) || 0),
+      professional_profile: text(body.professional_profile, 12000),
+      teaching_methodology: text(body.teaching_methodology, 12000),
+      additional_achievements: text(body.additional_achievements, 4000),
+      status: status(body.status),
+      display_order: Number(body.display_order) || 0,
+    }
+  }
   if (resource === 'testimonials') {
     const reviewerName = text(body.reviewer_name, 160)
     const reviewText = text(body.review_text, 3000)
@@ -96,25 +125,6 @@ function cleanPayload(resource, body) {
     } catch {
       throw new Error('Google URL must be a valid secure Google Maps link.')
     }
-    if (resource === 'faculty') {
-      const fullName = text(body.full_name, 160)
-      const designation = text(body.designation, 300)
-      if (!fullName || !designation) throw new Error('Name and designation are required.')
-      return {
-        full_name: fullName,
-        photograph: text(body.photograph, 2000),
-        designation,
-        institution: text(body.institution, 240),
-        qualifications: textList(body.qualifications, 20, 160),
-        specialisations: textList(body.specialisations, 20, 500),
-        experience_years: Math.max(0, Number(body.experience_years) || 0),
-        professional_profile: text(body.professional_profile, 12000),
-        teaching_methodology: text(body.teaching_methodology, 12000),
-        additional_achievements: text(body.additional_achievements, 4000),
-        status: status(body.status),
-        display_order: Number(body.display_order) || 0,
-      }
-    }
     return {
       reviewer_name: reviewerName, review_text: reviewText, rating,
       course_label: text(body.course_label, 120), google_url: googleUrl,
@@ -126,6 +136,8 @@ function cleanPayload(resource, body) {
 
 export default async function handler(req, res) {
   res.setHeader('Content-Type', 'application/json')
+  if (!isAdminAuthConfigured()) return sendError(res, 503, 'Admin authentication is not configured.')
+  if (isCsrfProtectedRequest(req)) return sendError(res, 403, 'Invalid request origin.')
   if (!isValidAdminToken(req)) return sendError(res, 401, 'Unauthorised.')
   const supabase = getSupabase()
   if (!supabase) return sendError(res, 503, 'Content service is not configured.')
@@ -137,8 +149,9 @@ export default async function handler(req, res) {
     const query = supabase.from(table).select('*').order('display_order', { ascending: true })
     const { data, error } = await query
     if (error) {
-      console.error('[admin/content] Fetch error:', error.message)
-      return sendError(res, 500, 'Failed to load content.')
+      logSupabaseError('Fetch', resource, error)
+      const code = error.code ? ` (${error.code})` : ''
+      return sendError(res, 500, `Failed to load ${resource} content${code}: ${error.message}`)
     }
     return res.status(200).json({ ok: true, items: data || [] })
   }
@@ -162,19 +175,23 @@ export default async function handler(req, res) {
       mime_type: match[1], size_bytes: buffer.length, alt_text: text(body.alt_text, 240),
       caption: text(body.caption, 500), display_order: Number(body.display_order) || 0,
     }).select().single()
-    if (error) return sendError(res, 500, 'Image uploaded but metadata could not be saved.')
+    if (error) {
+      logSupabaseError('Save media metadata', 'media', error)
+      return sendError(res, 500, 'Image uploaded but metadata could not be saved.')
+    }
     return res.status(201).json({ ok: true, item: data })
   }
 
   if (req.method === 'POST' || req.method === 'PATCH') {
     let payload
     try { payload = cleanPayload(resource, req.body || {}) } catch (error) { return sendError(res, 422, error.message) }
+    if (req.method === 'PATCH' && !text(req.body?.id, 100)) return sendError(res, 400, 'Content id is required.')
     const query = req.method === 'PATCH'
       ? supabase.from(table).update(payload).eq('id', req.body.id).select().single()
       : supabase.from(table).insert(payload).select().single()
     const { data, error } = await query
     if (error) {
-      console.error('[admin/content] Save error:', error.message)
+      logSupabaseError(req.method === 'PATCH' ? 'Update' : 'Create', resource, error)
       return sendError(res, 500, 'Failed to save content.')
     }
     return res.status(req.method === 'PATCH' ? 200 : 201).json({ ok: true, item: data })
@@ -193,7 +210,10 @@ export default async function handler(req, res) {
       }
     }
     const { error } = await supabase.from(table).delete().eq('id', id)
-    if (error) return sendError(res, 500, 'Failed to delete content.')
+    if (error) {
+      logSupabaseError('Delete', resource, error)
+      return sendError(res, 500, 'Failed to delete content.')
+    }
     return res.status(200).json({ ok: true })
   }
 

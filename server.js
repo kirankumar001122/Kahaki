@@ -11,9 +11,23 @@
 import express from 'express';
 import cors from 'cors';
 import { createClient } from '@supabase/supabase-js';
+import publicContentHandler from './api/content.js';
+import adminContentHandler from './api/admin/content.js';
+import adminEnquiriesHandler from './api/admin/enquiries.js';
+import adminLoginHandler from './api/admin/login.js';
+import adminLogoutHandler from './api/admin/logout.js';
+import { getAdminConfig } from './api/_adminAuth.js';
 
 const app  = express();
 const PORT = process.env.API_PORT || 3001;
+
+const adminConfig = getAdminConfig();
+console.log('[server] Admin authentication configuration:', {
+  phone: Boolean(adminConfig.ok && adminConfig.phone),
+  password: Boolean(adminConfig.ok && adminConfig.password),
+  secret: Boolean(adminConfig.ok && adminConfig.secret),
+  missing: adminConfig.ok ? [] : adminConfig.missing,
+});
 
 // ── Environment validation ─────────────────────────────────
 const SUPABASE_URL            = process.env.SUPABASE_URL;
@@ -39,8 +53,15 @@ app.use(express.json({ limit: '16kb' }));
 const DEV_ORIGIN = 'http://localhost:5173';
 app.use(cors({
   origin: process.env.NODE_ENV === 'production' ? false : DEV_ORIGIN,
-  methods: ['POST'],
+  credentials: true,
 }));
+
+// Run the same handlers used by Vercel locally.
+app.get('/api/content', publicContentHandler);
+app.all('/api/admin/content', adminContentHandler);
+app.get('/api/admin/enquiries', adminEnquiriesHandler);
+app.post('/api/admin/login', adminLoginHandler);
+app.post('/api/admin/logout', adminLogoutHandler);
 
 // ── Helpers ────────────────────────────────────────────────
 

@@ -66,22 +66,23 @@ function PublicSite() {
 // ── Admin panel ────────────────────────────────────────────
 function AdminPanel() {
   const [token, setToken] = useState(
-    () => sessionStorage.getItem('ka_admin_token') || ''
+    () => sessionStorage.getItem('ka_admin_authenticated') || ''
   );
 
   useEffect(() => {
     document.title = 'Admin Dashboard · Khaki Academy';
   }, []);
 
-  const handleLogin = (t) => setToken(t);
+  const handleLogin = () => setToken('authenticated');
 
   const handleLogout = () => {
-    sessionStorage.removeItem('ka_admin_token');
+    sessionStorage.removeItem('ka_admin_authenticated');
+    fetch('/api/admin/logout', { method: 'POST', credentials: 'same-origin' }).catch(() => {});
     setToken('');
   };
 
   if (!token) return <AdminLogin onLogin={handleLogin} />;
-  return <AdminDashboard token={token} onLogout={handleLogout} />;
+  return <AdminDashboard onLogout={handleLogout} />;
 }
 
 // ── Root ───────────────────────────────────────────────────

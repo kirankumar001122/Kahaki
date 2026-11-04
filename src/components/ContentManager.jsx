@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   Check, Edit3, ImagePlus, Plus, Save, Trash2, Upload, Video, X,
 } from 'lucide-react';
@@ -38,21 +38,32 @@ function emptyForm(resource) {
           : EMPTY_FACULTY;
 }
 
-function ContentManager({ token }) {
+function formTitle(resource, editing) {
+  if (editing) return resource === 'faculty' ? 'Edit faculty member' : 'Edit item';
+  return resource === 'courses' ? 'New course'
+    : resource === 'sections' ? 'New page section'
+      : resource === 'videos' ? 'New video'
+        : resource === 'testimonials' ? 'New testimonial'
+          : 'New faculty member';
+}
+
+function ContentManager() {
   const [tab, setTab] = useState('courses');
   const [items, setItems] = useState([]);
   const [form, setForm] = useState(EMPTY_COURSE);
   const [editing, setEditing] = useState(null);
+  const [formOpen, setFormOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
+  const editorRef = useRef(null);
 
   const load = useCallback(async () => {
     setLoading(true);
     setError('');
     try {
       const response = await fetch(`/api/admin/content?resource=${tab}`, {
-        headers: { Authorization: `Bearer ${token}` },
+        credentials: 'same-origin',
       });
       const json = await response.json();
       if (response.status === 401) throw new Error('Your session has expired. Please sign in again.');
@@ -63,19 +74,21 @@ function ContentManager({ token }) {
     } finally {
       setLoading(false);
     }
-  }, [tab, token]);
+  }, [tab]);
 
   useEffect(() => { load(); }, [load]);
 
   const startNew = () => {
     setEditing(null);
     setForm(emptyForm(tab));
+    setFormOpen(true);
     setMessage('');
     setError('');
   };
 
   const editItem = (item) => {
     setEditing(item.id);
+    setFormOpen(true);
     setForm(tab === 'courses'
       ? { ...item, highlights: (item.highlights || []).join('\n') }
       : tab === 'faculty'
@@ -84,6 +97,19 @@ function ContentManager({ token }) {
     setMessage('');
     setError('');
   };
+
+  const closeForm = () => {
+    setFormOpen(false);
+    setEditing(null);
+    setForm(emptyForm(tab));
+  };
+
+  useEffect(() => {
+    if (!formOpen) return;
+    editorRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const firstField = editorRef.current?.querySelector('input, textarea, select');
+    firstField?.focus();
+  }, [formOpen, tab, editing]);
 
   const updateField = (event) => {
     const { name, value } = event.target;
@@ -96,6 +122,8 @@ function ContentManager({ token }) {
     setError('');
     setMessage('');
     const payload = { ...form };
+    const submittedStatus = event.nativeEvent.submitter?.value;
+    if (tab === 'faculty' && (submittedStatus === 'draft' || submittedStatus === 'published')) payload.status = submittedStatus;
     if (tab === 'courses') payload.highlights = form.highlights.split('\n').map((value) => value.trim()).filter(Boolean);
     if (tab === 'faculty') {
       payload.qualifications = form.qualifications.split('\n').map((value) => value.trim()).filter(Boolean);
@@ -105,14 +133,14 @@ function ContentManager({ token }) {
     try {
       const response = await fetch(`/api/admin/content?resource=${tab}`, {
         method: editing ? 'PATCH' : 'POST',
-        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+        credentials: 'same-origin', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });
       const json = await response.json();
       if (!response.ok || !json.ok) throw new Error(json.message || 'Unable to save content.');
-      setMessage(`${tab === 'courses' ? 'Course' : tab === 'sections' ? 'Section' : tab === 'videos' ? 'Video' : tab === 'testimonials' ? 'Testimonial' : 'Faculty profile'} saved.`);
       startNew();
       await load();
+      setMessage(`${tab === 'courses' ? 'Course' : tab === 'sections' ? 'Section' : tab === 'videos' ? 'Video' : tab === 'testimonials' ? 'Testimonial' : 'Faculty profile'} saved.`);
     } catch (err) {
       setError(err.message || 'Unable to save content.');
     } finally {
@@ -125,7 +153,8 @@ function ContentManager({ token }) {
     setError('');
     try {
       const response = await fetch(`/api/admin/content?resource=${tab}&id=${encodeURIComponent(id)}`, {
-        method: 'DELETE', headers: { Authorization: `Bearer ${token}` },
+        method: 'DELETE',
+        credentials: 'same-origin',
       });
       const json = await response.json();
       if (!response.ok || !json.ok) throw new Error(json.message || 'Unable to delete item.');
@@ -154,7 +183,7 @@ function ContentManager({ token }) {
           <h2>Content Manager</h2>
           <p>Save drafts, publish updates, and manage the content shown on the public website.</p>
         </div>
-        <button className="content-btn content-btn--primary" onClick={startNew}><Plus size={16} /> New item</button>
+        <button type="button" className="content-btn content-btn--primary" onClick={startNew}><Plus size={16} /> New item</button>
       </div>
 
       <nav className="content-tabs" aria-label="Content types">
@@ -165,7 +194,7 @@ function ContentManager({ token }) {
           ['testimonials', 'Testimonials'],
           ['faculty', 'Teaching staff'],
         ].map(([value, label]) => (
-          <button key={value} className={tab === value ? 'is-active' : ''} onClick={() => { setTab(value); setForm(emptyForm(value)); setEditing(null); }}>
+          <button type="button" key={value} className={tab === value ? 'is-active' : ''} onClick={() => { setTab(value); setForm(emptyForm(value)); setEditing(null); setFormOpen(false); }}>
             {value === 'videos' ? <Video size={15} /> : <Edit3 size={15} />}{label}
           </button>
         ))}
@@ -175,10 +204,10 @@ function ContentManager({ token }) {
       {error && <div className="content-alert content-alert--error">{error}</div>}
 
       <div className="content-manager__layout">
-        <form className="content-editor" onSubmit={save}>
+        {formOpen ? <form ref={editorRef} className="content-editor content-editor--open" onSubmit={save}>
           <div className="content-editor__title">
-            <h3>{editing ? 'Edit item' : `New ${tab === 'courses' ? 'course' : tab === 'sections' ? 'section' : tab === 'videos' ? 'video' : 'testimonial'}`}</h3>
-            {editing && <button type="button" className="content-icon-btn" onClick={startNew} aria-label="Cancel editing"><X size={16} /></button>}
+            <h3>{formTitle(tab, editing)}</h3>
+            <button type="button" className="content-icon-btn" onClick={closeForm} aria-label="Cancel form"><X size={16} /></button>
           </div>
           {tab === 'courses' && (
             <>
@@ -223,23 +252,33 @@ function ContentManager({ token }) {
             <label className="content-field"><span>Status</span><select name="status" value={form.status} onChange={updateField}><option value="draft">Draft</option><option value="published">Published</option></select></label>
             {renderField('display_order', 'Display order', { type: 'number' })}
           </div>
-          <button className="content-btn content-btn--primary" type="submit" disabled={loading}><Save size={16} />{loading ? 'Saving…' : 'Save content'}</button>
-        </form>
+          {tab === 'faculty' ? (
+            <div className="content-form-actions">
+              <button className="content-btn content-btn--secondary" type="submit" name="save-draft" value="draft" disabled={loading}><Save size={16} />{editing ? 'Update Draft' : 'Save Draft'}</button>
+              <button className="content-btn content-btn--primary" type="submit" name="publish" value="published" disabled={loading}><Save size={16} />{editing ? 'Update & Publish' : 'Publish'}</button>
+            </div>
+          ) : (
+            <button className="content-btn content-btn--primary" type="submit" disabled={loading}><Save size={16} />{loading ? 'Saving…' : 'Save content'}</button>
+          )}
+        </form> : (
+          <div className="content-editor content-editor--closed">
+            <p className="content-state">Choose “New item” to create {tab === 'faculty' ? 'a faculty member' : `a ${tab === 'sections' ? 'page section' : tab.slice(0, -1)}`}.</p>
+          </div>
+        )}
 
         <div className="content-list">
-          <div className="content-list__header">          <h3>{tab === 'courses' ? 'Courses' : tab === 'sections' ? 'Sections' : tab === 'videos' ? 'Videos' : tab === 'testimonials' ? 'Testimonials' : 'Teaching staff'}</h3><button className="content-icon-btn" onClick={load} aria-label="Refresh"><Upload size={16} /></button></div>
+          <div className="content-list__header">          <h3>{tab === 'courses' ? 'Courses' : tab === 'sections' ? 'Sections' : tab === 'videos' ? 'Videos' : tab === 'testimonials' ? 'Testimonials' : 'Teaching staff'}</h3><button type="button" className="content-icon-btn" onClick={load} aria-label="Refresh"><Upload size={16} /></button></div>
           {loading && <p className="content-state">Loading…</p>}
           {!loading && items.length === 0 && <p className="content-state">No items yet. Create your first draft.</p>}
           {!loading && items.map((item) => (
             <article className="content-list__item" key={item.id}>
               <div><strong>{item.title || item.full_name || `${item.page_key} / ${item.section_key}`}</strong><span>{item.status} · order {item.display_order}</span></div>
-              <div className="content-list__actions"><button className="content-icon-btn" onClick={() => editItem(item)} aria-label="Edit"><Edit3 size={15} /></button><button className="content-icon-btn content-icon-btn--danger" onClick={() => remove(item.id)} aria-label="Delete"><Trash2 size={15} /></button></div>
+              <div className="content-list__actions"><button type="button" className="content-icon-btn" onClick={() => editItem(item)} aria-label="Edit"><Edit3 size={15} /></button><button type="button" className="content-icon-btn content-icon-btn--danger" onClick={() => remove(item.id)} aria-label="Delete"><Trash2 size={15} /></button></div>
             </article>
           ))}
         </div>
       </div>
       <MediaUploader
-        token={token}
         onUse={(url) => setForm((previous) => ({
           ...previous,
           [tab === 'faculty' ? 'photograph' : 'image_url']: url,
@@ -249,7 +288,7 @@ function ContentManager({ token }) {
   );
 }
 
-function MediaUploader({ token, onUse }) {
+function MediaUploader({ onUse }) {
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState('');
   const [altText, setAltText] = useState('');
@@ -259,11 +298,11 @@ function MediaUploader({ token, onUse }) {
 
   const loadLibrary = useCallback(async () => {
     const response = await fetch('/api/admin/content?resource=media', {
-      headers: { Authorization: `Bearer ${token}` },
+      credentials: 'same-origin',
     });
     const json = await response.json();
     if (response.ok && json.ok) setLibrary(json.items || []);
-  }, [token]);
+  }, []);
 
   useEffect(() => { loadLibrary(); }, [loadLibrary]);
 
@@ -286,7 +325,7 @@ function MediaUploader({ token, onUse }) {
     setMessage('');
     fetch('/api/admin/content?resource=media', {
       method: 'POST',
-      headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+      credentials: 'same-origin', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ data_url: preview, file_name: file.name, alt_text: altText }),
     }).then(async (response) => {
       const json = await response.json();
@@ -303,17 +342,20 @@ function MediaUploader({ token, onUse }) {
       <input type="file" accept="image/jpeg,image/png,image/webp" onChange={choose} />
       {preview && <img src={preview} alt="Selected preview" className="media-uploader__preview" />}
       {file && <input placeholder="Image alt text" value={altText} onChange={(event) => setAltText(event.target.value)} />}
-      <button className="content-btn content-btn--secondary" onClick={upload} disabled={!file}><Upload size={15} /> Upload image</button>
+      <button type="button" className="content-btn content-btn--secondary" onClick={upload} disabled={!file}><Upload size={15} /> Upload image</button>
       {message && <small className="content-success">{message}</small>}{error && <small className="content-error">{error}</small>}
       {library.length > 0 && (
         <div className="media-library">
           {library.map((asset) => (
             <div className="media-library__item" key={asset.id}>
               <img src={asset.public_url} alt={asset.alt_text || asset.file_name} />
-              <button className="content-btn content-btn--secondary" onClick={() => onUse(asset.public_url)}>Use image</button>
-              <button className="content-icon-btn content-icon-btn--danger" onClick={async () => {
+              <button type="button" className="content-btn content-btn--secondary" onClick={() => onUse(asset.public_url)}>Use image</button>
+              <button type="button" className="content-icon-btn content-icon-btn--danger" onClick={async () => {
                 if (!window.confirm('Delete this image permanently?')) return;
-                await fetch(`/api/admin/content?resource=media&id=${asset.id}`, { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } });
+                await fetch(`/api/admin/content?resource=media&id=${asset.id}`, {
+                  method: 'DELETE',
+                  credentials: 'same-origin',
+                });
                 await loadLibrary();
               }} aria-label={`Delete ${asset.file_name}`}><Trash2 size={14} /></button>
             </div>

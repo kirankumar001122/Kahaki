@@ -174,6 +174,96 @@ create table if not exists public.faculty (
   updated_at            timestamptz not null default now()
 );
 
+insert into public.faculty (
+  full_name, photograph, designation, institution, qualifications, specialisations,
+  experience_years, professional_profile, teaching_methodology, additional_achievements,
+  status, display_order
+)
+select
+  'MUBARAK M. A.', '/images/teachers/mubarak-ma.jpg',
+  'Senior Hindi & Social Science Faculty | SSLC Specialist',
+  'KHAKI ACADEMY — ACADEMY OF EXCELLENCE',
+  array['M.A.', 'D.Ed.', 'B.Ed.'],
+  array['Hindi: 10th Grade (SSLC) specialist.', 'Social Science: School-level instruction.'],
+  15,
+  'Mubarak M. A. is an experienced educator with 15 years of teaching experience, specialising in 10th-grade Hindi and Social Science. He focuses on strengthening students’ Hindi grammar, comprehension, writing skills, and examination preparation while helping them understand key concepts in history, geography, civics, and economics.',
+  'His teaching approach emphasises syllabus-based instruction, conceptual clarity, systematic revision, and question-paper practice to help students build confidence and prepare effectively for their SSLC examinations.',
+  '',
+  'published', 0
+where not exists (select 1 from public.faculty where full_name = 'MUBARAK M. A.');
+
+insert into public.faculty (
+  full_name, photograph, designation, institution, qualifications, specialisations,
+  experience_years, professional_profile, teaching_methodology, additional_achievements,
+  status, display_order
+)
+select
+  'VASANTH KUMAR N. G.', '/images/teachers/VASANTH KUMAR N. G.PNG',
+  'Senior Mathematics Faculty | Academic Guide & Trainer',
+  'KHAKI ACADEMY — ACADEMY OF EXCELLENCE',
+  array['M.Sc.', 'B.Ed.', 'TET Qualified'],
+  array['Mathematics: 10th Grade, 1st PUC and 2nd PUC.', 'Computer Training.', 'Soft Skills Training.', 'Academic Guidance and Student Mentoring.'],
+  10,
+  'Vasanth Kumar N. G. is an experienced mathematics educator and academic guide with 10 years of teaching experience. He specialises in mathematics for SSLC, 1st PUC and 2nd PUC students, focusing on conceptual clarity, logical reasoning, problem-solving techniques and examination preparation.',
+  'In addition to mathematics education, he provides computer training and soft skills development to help learners strengthen their academic and professional competencies. As an academic guide, he supports students in developing effective learning strategies, confidence and a strong foundation for future success.',
+  'At KHAKI ACADEMY, he is committed to delivering quality education through structured teaching, individual guidance and student-centred learning.',
+  'published', 1
+where not exists (select 1 from public.faculty where full_name = 'VASANTH KUMAR N. G.');
+
+insert into public.faculty (
+  full_name, photograph, designation, institution, qualifications, specialisations,
+  experience_years, professional_profile, teaching_methodology, additional_achievements,
+  status, display_order
+)
+select
+  'NAVEEN KUMAR Y.', '/images/teachers/NAVEEN KUMAR Y.PNG',
+  'Senior Faculty – Physics & Mathematics',
+  'KHAKI ACADEMY — ACADEMY OF EXCELLENCE',
+  array['B.E. – Bachelor of Engineering.', 'M.Tech – Master of Technology.', 'Ph.D. – Currently Pursuing.'],
+  array['Physics.', 'Mathematics.'],
+  5,
+  'Naveen Kumar Y is an experienced educator specialising in Physics and Mathematics. With five years of teaching experience, he focuses on conceptual clarity, analytical thinking, problem-solving techniques, and the practical application of scientific and mathematical principles.',
+  'His teaching approach emphasises structured learning, logical reasoning, and a clear understanding of fundamental concepts.',
+  'State Second Topper in M.Tech. At KHAKI ACADEMY, he is committed to delivering effective, student-focused education that strengthens subject knowledge, develops problem-solving skills, and prepares learners to achieve academic excellence.',
+  'published', 2
+where not exists (select 1 from public.faculty where full_name = 'NAVEEN KUMAR Y.');
+
+insert into public.faculty (
+  full_name, photograph, designation, institution, qualifications, specialisations,
+  experience_years, professional_profile, teaching_methodology, additional_achievements,
+  status, display_order
+)
+select
+  'ARUN S. A.', '/images/teachers/ARUN S A.PNG',
+  'Senior Physics Faculty | PUC Physics Specialist',
+  'KHAKI ACADEMY — ACADEMY OF EXCELLENCE',
+  array['M.Sc. in Physics.', 'B.Ed.', 'TET Qualified.', 'KSET Qualified.', 'Ph.D. – Currently Pursuing.'],
+  array['Physics.', 'First PUC.', 'Second PUC.'],
+  8,
+  'Arun S. A. is an experienced Physics educator specialising in First PUC and Second PUC Physics. With eight years of teaching experience, he focuses on strengthening fundamental concepts, developing analytical and problem-solving skills, and simplifying complex physical principles through structured and systematic instruction.',
+  'With a strong academic background in Physics, along with B.Ed. qualification, TET and KSET credentials, he is committed to maintaining high teaching standards and supporting students in their academic development.',
+  'At KHAKI ACADEMY, he strives to deliver concept-oriented, student-focused Physics education, helping learners develop scientific reasoning, improve examination performance, and build confidence in the subject.',
+  'published', 3
+where not exists (select 1 from public.faculty where full_name = 'ARUN S. A.');
+
+insert into public.faculty (
+  full_name, photograph, designation, institution, qualifications, specialisations,
+  experience_years, professional_profile, teaching_methodology, additional_achievements,
+  status, display_order
+)
+select
+  'MANJUNATHA T.', '/images/teachers/MANJUNATHA T.PNG',
+  'Senior Faculty | Social Science & Kannada Specialist',
+  'KHAKI ACADEMY — ACADEMY OF EXCELLENCE',
+  array['M.A.', 'B.Ed.', 'TET Qualified'],
+  array['Social Science.', 'Kannada.'],
+  6,
+  'Manjunatha T. is an experienced educator specialising in Social Science and Kannada, with six years of teaching experience. He is committed to helping students develop a strong understanding of subject concepts, improve language proficiency, and achieve academic excellence through structured and systematic instruction.',
+  'With a postgraduate qualification (M.A.), a Bachelor of Education (B.Ed.), and TET qualification, he brings a strong academic foundation and a student-focused approach to teaching. His teaching methodology emphasises conceptual clarity, effective communication, curriculum-oriented instruction, and the development of critical thinking skills.',
+  'At KHAKI ACADEMY, he strives to deliver engaging and effective Social Science and Kannada education, helping learners strengthen their subject knowledge, improve examination performance, and build confidence in their academic journey.',
+  'published', 4
+where not exists (select 1 from public.faculty where full_name = 'MANJUNATHA T.');
+
 create index if not exists idx_website_sections_published
   on public.website_sections (page_key, status, display_order);
 create index if not exists idx_courses_published

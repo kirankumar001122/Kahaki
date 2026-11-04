@@ -1,13 +1,18 @@
 // GET /api/admin/enquiries
 // Returns all admission enquiries from Supabase. Requires valid admin token.
 import { createClient } from '@supabase/supabase-js'
-import { isValidAdminToken } from '../_adminAuth.js'
+import { isAdminAuthConfigured, isValidAdminToken } from '../_adminAuth.js'
 
 export default async function handler(req, res) {
   res.setHeader('Content-Type', 'application/json')
 
   if (req.method !== 'GET') {
     return res.status(405).json({ ok: false, message: 'Method not allowed.' })
+  }
+
+  if (!isAdminAuthConfigured()) {
+    console.error('[admin/enquiries] Admin authentication is not configured')
+    return res.status(503).json({ ok: false, message: 'Admin authentication is not configured.' })
   }
 
   if (!isValidAdminToken(req)) {
