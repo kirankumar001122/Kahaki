@@ -79,7 +79,7 @@
 }
 
 .teaching-staff__accordion.is-expanded .teaching-staff__content {
-  max-height: 10000px;
+  max-height: 60000px;
   opacity: 1;
 }
 
@@ -110,8 +110,7 @@
   width: min(100%, 280px);
   aspect-ratio: 4 / 5;
   overflow: hidden;
-  border: 5px solid var(--beige);
-  border-radius: var(--radius-xl);
+  border-radius: 36px 14px 36px 14px;
   background: var(--beige);
   box-shadow: var(--shadow-md);
 }

@@ -55,6 +55,10 @@ export default function Navbar() {
           onClick={(e) => { e.preventDefault(); handleNavClick('#home'); }}
         >
           <img src="/khaki-logo.jpg" alt="Khaki Academy" className="navbar__logo-img" />
+          <span className="navbar__brand" aria-hidden="true">
+            <span className="navbar__brand-name">Khaki Academy</span>
+            <span className="navbar__brand-tag">Coaching &amp; Training · Malur</span>
+          </span>
         </a>
 
         {/* Desktop Nav */}
@@ -84,6 +88,12 @@ export default function Navbar() {
             Enquire Now
           </a>
         </div>
+
+        {/* Mobile quick call */}
+        <a href="tel:7338308071" className="navbar__mobile-quick-call" aria-label="Call Khaki Academy at 7338308071">
+          <Phone size={17} />
+          <span>Call</span>
+        </a>
 
         {/* Mobile hamburger */}
         <button

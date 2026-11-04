@@ -8,7 +8,7 @@ function FacultyProfile({ faculty }) {
   return (
     <article className="staff-profile">
       <div className="staff-profile__identity">
-        <div className="staff-profile__portrait">
+        <div className="staff-profile__portrait photo-frame photo-frame__media">
           <img src={faculty.photograph} alt={`${faculty.full_name} portrait`} loading="lazy" />
         </div>
         <div className="staff-profile__identity-copy">

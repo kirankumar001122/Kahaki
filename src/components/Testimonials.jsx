@@ -1,21 +1,16 @@
 import { useState } from 'react';
-import { ExternalLink, Quote, Star } from 'lucide-react';
+import { ChevronDown, ExternalLink, Quote, Star } from 'lucide-react';
 import './Testimonials.css';
 import { usePublishedContent } from '../hooks/usePublishedContent';
 
 const GOOGLE_LISTING_URL = 'https://maps.app.goo.gl/3FeizTNvzi8PYoSr9';
+const MAX_REVIEWS = 4;
 
 const SUPPLIED_REVIEWS = [
-  ['Preethi Elumalai Arun', 'The computer class was very useful. I learned basic to advanced computer skills in an easy way. The teaching was clear and understandable. 👌 Thank you mam 😊'],
-  ['Vennela', 'At Khaki Academy I started my journey on 06/03/2026. It was good in every thing. I learned a lot in computer class, discipline, respect, and basic sense for job and also I got more knowledge about computer.'],
-  ['Anu radha Anu', "I'm Disha, I have completed computer course in this academy. It's good and is worth it for excellent coaching ✨"],
-  ['Deepa munirathna Munirathna', 'This course is good. This course is very useful in my future and I also got more knowledge about computer. I would like to say thanks to all.'],
-  ['yashas sai', "It's very useful for developing our computer skills in this AI era. Khaki Academy from Malur helped me study this, so thank you for that."],
+  ['Preethi Elumalai Arun', 'The computer class was very useful. I learned basic to advanced computer skills in an easy way. The teaching was clear and understandable. 👌 Thank you mam 😊', 'Computer training'],
   ['Santhosh', 'I have completed my Tally course at Khaki Academy. The teaching was very clear and easy to understand. Trainers provided good practical knowledge on accounting and GST.', 'Tally'],
   ['Priya 54', 'Excellent training for computer training. I have completed basics of computer (CCA). I got more knowledge about computer and the teaching was very good.', 'Basic Computer / CCA'],
-  ['Chalapathi D N', 'The instructors provided excellent practical knowledge, and the doubt-clearing sessions were very helpful for us. I would like to say thanks to all.'],
-  ['Sandhya C.N', "Very friendly classes I never saw anywhere else. Ma'am understands my busy schedules and supports me in each class ☺️"],
-  ['SANJANA M.R', 'Khaki Academy computer classes are practical, and the teaching is friendly. These computer classes are really useful for the future.', 'Computer training'],
+  ['Sandhya C.N', "Very friendly classes I never saw anywhere else. Ma'am understands my busy schedules and supports me in each class ☺️", 'Computer training'],
 ].map(([reviewer_name, review_text, course_label], display_order) => ({
   id: `supplied-${display_order}`,
   reviewer_name,
@@ -26,6 +21,15 @@ const SUPPLIED_REVIEWS = [
   display_order,
 }));
 
+function getInitials(name = '') {
+  return name
+    .split(/\s+/)
+    .filter((part) => /^[a-z]/i.test(part))
+    .slice(0, 2)
+    .map((part) => part[0].toUpperCase())
+    .join('');
+}
+
 function ReviewCard({ review }) {
   const [expanded, setExpanded] = useState(false);
   const isLong = review.review_text.length > 190;
@@ -34,11 +38,12 @@ function ReviewCard({ review }) {
   return (
     <article className="review-card">
       <div className="review-card__top">
-        <div>
+        <span className="review-card__avatar" aria-hidden="true">{getInitials(review.reviewer_name)}</span>
+        <div className="review-card__identity">
           <h3>{review.reviewer_name}</h3>
           {review.course_label && <span className="review-card__course">{review.course_label}</span>}
         </div>
-        <Quote size={20} aria-hidden="true" />
+        <Quote size={22} aria-hidden="true" />
       </div>
       <div className="review-card__stars" aria-label={`${review.rating} out of 5 stars`}>
         {Array.from({ length: 5 }, (_, index) => (
@@ -62,8 +67,9 @@ function ReviewCard({ review }) {
 }
 
 export default function Testimonials() {
+  const [expanded, setExpanded] = useState(false);
   const { testimonials } = usePublishedContent();
-  const reviews = testimonials.length > 0 ? testimonials : SUPPLIED_REVIEWS;
+  const reviews = (testimonials.length > 0 ? testimonials : SUPPLIED_REVIEWS).slice(0, MAX_REVIEWS);
 
   return (
     <section id="testimonials" className="testimonials section">
@@ -76,15 +82,43 @@ export default function Testimonials() {
           </p>
         </div>
 
-        <div className="testimonials__grid">
-          {reviews.map((review) => <ReviewCard key={review.id} review={review} />)}
-        </div>
+        <div className={`testimonials__accordion ${expanded ? 'is-expanded' : ''}`}>
+          <button
+            type="button"
+            className="testimonials__trigger"
+            aria-expanded={expanded}
+            aria-controls="testimonials-reviews"
+            onClick={() => setExpanded((isOpen) => !isOpen)}
+          >
+            <span>
+              <span className="testimonials__trigger-label">What Our Students Say</span>
+              <span className="testimonials__trigger-hint">
+                {expanded ? 'Hide student reviews' : `Read ${reviews.length} student reviews`}
+                <span className="testimonials__trigger-stars" aria-hidden="true">★★★★★</span>
+              </span>
+            </span>
+            <ChevronDown size={22} aria-hidden="true" />
+          </button>
+          <div
+            id="testimonials-reviews"
+            className="testimonials__content"
+            role="region"
+            aria-label="Student reviews"
+            aria-hidden={!expanded}
+          >
+            <div className="testimonials__inner">
+              <div className="testimonials__grid">
+                {reviews.map((review) => <ReviewCard key={review.id} review={review} />)}
+              </div>
 
-        <div className="testimonials__actions">
-          <a className="btn btn-primary btn-lg" href={GOOGLE_LISTING_URL} target="_blank" rel="noopener noreferrer">
-            Read All Google Reviews <ExternalLink size={17} />
-          </a>
-          <p>Feedback reproduced from reviews supplied for Khaki Academy. Ratings shown are based on the supplied review information and are not independently verified by this website.</p>
+              <div className="testimonials__actions">
+                <a className="btn btn-primary btn-lg" href={GOOGLE_LISTING_URL} target="_blank" rel="noopener noreferrer">
+                  Read All Google Reviews <ExternalLink size={17} />
+                </a>
+                <p>Feedback reproduced from reviews supplied for Khaki Academy. Ratings shown are based on the supplied review information and are not independently verified by this website.</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>

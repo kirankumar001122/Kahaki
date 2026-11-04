@@ -1,5 +1,5 @@
-import { useMemo } from 'react';
-import { CheckCircle, ArrowRight } from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
+import { CheckCircle, ArrowRight, ChevronDown } from 'lucide-react';
 import './Courses.css';
 import { usePublishedContent } from '../hooks/usePublishedContent';
 
@@ -103,8 +103,54 @@ const COURSE_HIGHLIGHTS = {
   ],
 };
 
+function CourseHighlights({ features, id, open, onToggle }) {
+  return (
+    <div className={`course-card__highlights ${open ? 'is-open' : ''}`}>
+      <button
+        type="button"
+        className="course-card__highlights-toggle"
+        aria-expanded={open}
+        aria-controls={id}
+        onClick={onToggle}
+      >
+        <span>{open ? 'Hide course highlights' : `View course highlights (${features.length})`}</span>
+        <ChevronDown size={18} aria-hidden="true" />
+      </button>
+      <div id={id} className="course-card__highlights-content" aria-hidden={!open}>
+        <ul className="course-card__features">
+          {features.map((f, j) => (
+            <li key={j} className="course-card__feature">
+              <CheckCircle size={14} />
+              <span>{f}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  );
+}
+
 export default function Courses() {
+  const [openIndex, setOpenIndex] = useState(null);
   const { courses: publishedCourses } = usePublishedContent();
+
+  /* Close the open highlights panel on outside click or Escape */
+  useEffect(() => {
+    if (openIndex === null) return undefined;
+    const onPointerDown = (event) => {
+      if (!event.target.closest('.course-card__highlights')) setOpenIndex(null);
+    };
+    const onKeyDown = (event) => {
+      if (event.key === 'Escape') setOpenIndex(null);
+    };
+    document.addEventListener('pointerdown', onPointerDown);
+    document.addEventListener('keydown', onKeyDown);
+    return () => {
+      document.removeEventListener('pointerdown', onPointerDown);
+      document.removeEventListener('keydown', onKeyDown);
+    };
+  }, [openIndex]);
+
   const courses = useMemo(() => {
     if (publishedCourses.length === 0) return COURSES;
     return publishedCourses.map((course) => ({
@@ -144,7 +190,8 @@ export default function Courses() {
           {courses.map((course, i) => (
             <div
               key={i}
-              className={`course-card fade-in`}
+              className="course-card fade-in"
+              data-open={openIndex === i ? 'true' : undefined}
               style={{ transitionDelay: `${i * 0.08}s` }}
             >
               <div className="course-card__img-wrap">
@@ -158,14 +205,12 @@ export default function Courses() {
                 <p className="course-card__desc">{course.desc}</p>
 
                 {course.features.length > 0 && (
-                <ul className="course-card__features">
-                  {course.features.map((f, j) => (
-                    <li key={j} className="course-card__feature">
-                      <CheckCircle size={14} />
-                      <span>{f}</span>
-                    </li>
-                  ))}
-                </ul>
+                  <CourseHighlights
+                    features={course.features}
+                    id={`course-highlights-${i}`}
+                    open={openIndex === i}
+                    onToggle={() => setOpenIndex((current) => (current === i ? null : i))}
+                  />
                 )}
 
                 <div className="course-card__footer">

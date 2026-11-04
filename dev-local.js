@@ -6,7 +6,8 @@ const processes = [
     stdio: 'inherit',
     env: { ...process.env, FORCE_COLOR: '1' },
   }),
-  spawn(process.execPath, [resolve('node_modules/vite/bin/vite.js')], {
+  // Extra CLI args (e.g. `npm run dev -- --host`) are forwarded to Vite
+  spawn(process.execPath, [resolve('node_modules/vite/bin/vite.js'), ...process.argv.slice(2)], {
     stdio: 'inherit',
     env: { ...process.env, FORCE_COLOR: '1' },
   }),

@@ -14,8 +14,8 @@ export default function Trainers() {
         {/* Founder feature layout */}
         <div className="founder__layout fade-in">
           {/* Left — Photo Card */}
-          <div className="founder__card">
-            <div className="founder__img-wrap">
+          <div className="founder__card photo-frame">
+            <div className="founder__img-wrap photo-frame__media">
               <img
                 src="/images/govardhan-krishna.png"
                 alt="Govardhan Krishna – Founder & Managing Director, Khaki Academy"
@@ -50,17 +50,12 @@ export default function Trainers() {
             >
               Contact the academy →
             </button>
-
-            <p className="founder__disclaimer">
-              *Achievement descriptions reflect the academy's own promotional materials. Supporting certificates
-              and record-body details should be displayed if available.
-            </p>
           </div>
         </div>
 
         <div className="founder__layout founder__layout--cofounder fade-in">
-          <div className="founder__card">
-            <div className="founder__img-wrap">
+          <div className="founder__card photo-frame">
+            <div className="founder__img-wrap photo-frame__media">
               <img
                 src="/images/vignesh-krishna.png"
                 alt="Vignesh Krishna – Co-Founder, Khaki Academy"

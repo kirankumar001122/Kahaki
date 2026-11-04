@@ -13,14 +13,19 @@
 
 /* Course Card */
 .course-card {
+  position: relative;
   background: var(--white);
   border-radius: var(--radius-xl);
   border: 1px solid var(--border);
   box-shadow: var(--shadow-sm);
-  overflow: hidden;
   transition: all var(--transition-base);
   display: flex;
   flex-direction: column;
+}
+
+/* Keep the card with the open panel above its neighbours */
+.course-card[data-open='true'] {
+  z-index: 10;
 }
 
 .course-card:hover {
@@ -38,6 +43,7 @@
   position: relative;
   height: 180px;
   overflow: hidden;
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
 }
 
 .course-card__img {
@@ -117,11 +123,89 @@
   font-weight: 500;
 }
 
+/* Drop-down course highlights (floating panel — never changes card height) */
+.course-card__highlights {
+  position: relative;
+}
+
+.course-card__highlights-toggle {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: 0.65rem 0.9rem;
+  border: 0;
+  border-radius: var(--radius-md);
+  color: var(--white);
+  background: var(--navy);
+  font: inherit;
+  font-size: 0.84rem;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--transition-base), border-radius var(--transition-base);
+}
+
+.course-card__highlights.is-open .course-card__highlights-toggle {
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+}
+
+.course-card__highlights-toggle:hover,
+.course-card__highlights-toggle:focus-visible {
+  background: var(--navy-light);
+}
+
+.course-card__highlights-toggle:focus-visible {
+  outline: 3px solid var(--gold-light);
+  outline-offset: -3px;
+}
+
+.course-card__highlights-toggle svg {
+  flex-shrink: 0;
+  color: var(--gold-light);
+  transition: transform var(--transition-base);
+}
+
+.course-card__highlights.is-open .course-card__highlights-toggle svg {
+  transform: rotate(180deg);
+}
+
+.course-card__highlights-content {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 20;
+  border: 1px solid var(--border);
+  border-top: 0;
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+  background: var(--white);
+  box-shadow: 0 14px 30px rgba(15, 27, 51, 0.18);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-6px);
+  transition: opacity var(--transition-base), transform var(--transition-base), visibility var(--transition-base);
+}
+
+.course-card__highlights.is-open .course-card__highlights-content {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
 .course-card__features {
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
+  gap: 0.45rem;
+  padding: 0.85rem 0.95rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .course-card__highlights-toggle,
+  .course-card__highlights-toggle svg,
+  .course-card__highlights-content { transition: none; }
 }
 
 .course-card__feature {
