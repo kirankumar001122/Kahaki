@@ -264,6 +264,225 @@ select
   'published', 4
 where not exists (select 1 from public.faculty where full_name = 'MANJUNATHA T.');
 
+-- Additional published faculty and administrative profiles requested by the public site.
+insert into public.faculty (
+  full_name, photograph, designation, institution, qualifications, specialisations,
+  experience_years, professional_profile, teaching_methodology, additional_achievements,
+  status, display_order
+)
+select
+  'GANESH', '/images/teachers/GANESH.PNG',
+  'PCM Faculty - Chemistry Specialist',
+  'KHAKI ACADEMY - ACADEMY OF EXCELLENCE',
+  array['M.Sc.', 'B.Ed.'], array['Chemistry', '2nd PUC Organic Chemistry'], 3,
+  'Ganesh specialises in Chemistry with a focus on conceptual clarity and examination preparation.',
+  'Structured, concept-oriented instruction with systematic problem-solving practice.', '',
+  'published', 10
+where not exists (select 1 from public.faculty where upper(full_name) = 'GANESH');
+
+insert into public.faculty (
+  full_name, photograph, designation, institution, qualifications, specialisations,
+  experience_years, professional_profile, teaching_methodology, additional_achievements,
+  status, display_order
+)
+select
+  'SRIKANTH P', '/images/teachers/SHRIKANTH P.PNG',
+  'PCM Faculty - Chemistry Specialist',
+  'KHAKI ACADEMY - ACADEMY OF EXCELLENCE',
+  array['M.Sc. in Organic Chemistry', 'B.Ed.', 'KSET Qualified'],
+  array['Chemistry', 'Organic Chemistry', 'PUC Chemistry'], 6,
+  'Srikanth P is an experienced Chemistry educator specialising in Organic Chemistry.',
+  'Structured teaching, subject expertise and student-focused examination preparation.', '',
+  'published', 11
+where not exists (select 1 from public.faculty where upper(full_name) = 'SRIKANTH P');
+
+insert into public.faculty (
+  full_name, photograph, designation, institution, qualifications, specialisations,
+  experience_years, professional_profile, teaching_methodology, additional_achievements,
+  status, display_order
+)
+select
+  'ARUNA G', '/images/teachers/ARUNA G.PNG',
+  'Administration - Computer & Spoken English Trainer',
+  'KHAKI ACADEMY - ACADEMY OF EXCELLENCE',
+  array['Bachelor of Commerce (B.Com.)'],
+  array['Administration', 'Business Studies - 2nd PUC', 'Computer Education', 'Spoken English Training'], 4,
+  'Aruna G supports administration and helps learners develop practical computer skills and effective English communication.',
+  'Practical learning, clear instruction and confidence building.', '',
+  'published', 12
+where not exists (select 1 from public.faculty where upper(full_name) = 'ARUNA G');
+
+insert into public.faculty (
+  full_name, photograph, designation, institution, qualifications, specialisations,
+  experience_years, professional_profile, teaching_methodology, additional_achievements,
+  status, display_order
+)
+select
+  'ANIL', '/images/teachers/ANIL V.PNG',
+  'Finance Department',
+  'KHAKI ACADEMY - ACADEMY OF EXCELLENCE',
+  array[]::text[], array['Finance Department'], 5,
+  'Anil supports the Finance Department with 5 years of experience.',
+  'Professional and organised administrative support.', '',
+  'published', 13
+where not exists (select 1 from public.faculty where upper(full_name) in ('ANIL', 'ANIL V'));
+
+insert into public.courses (
+  slug, title, short_description, detailed_description, category, image_url, image_alt,
+  highlights, duration, button_label, button_url, status, display_order
+)
+select
+  'professional-spoken-english-online',
+  'Professional Spoken English — Online',
+  'Develop confident English communication skills through structured online training, practical speaking activities, pronunciation improvement, grammar development and real-world communication practice.',
+  'Online Professional Spoken English training covering fluency, accent, pronunciation, grammar, professional communication, interviews, public speaking and practical conversation sessions.',
+  'Language & Communication',
+  '/images/professional-spoken-english.png',
+  'Professional Spoken English online course',
+  array[
+    'English speaking and fluency development',
+    'Accent training and pronunciation',
+    'English grammar and sentence formation',
+    'Professional communication',
+    'Interview preparation',
+    'Public speaking and presentation skills',
+    'Practical conversation sessions'
+  ],
+  'Online', 'Enquire Now', '#contact', 'published', 20
+where not exists (select 1 from public.courses where slug = 'professional-spoken-english-online');
+
+-- Restore the original public course catalogue in CMS without replacing existing rows.
+insert into public.courses (
+  slug, title, short_description, category, image_url, image_alt, highlights,
+  duration, button_label, button_url, status, display_order
+)
+select
+  'professional-spoken-english',
+  'Professional Spoken English',
+  'Absolute Beginner to Advanced levels. American & British Accents. Fluent & Grammatically Correct.',
+  'English', '/images/professional-spoken-english.png', 'Professional Spoken English course',
+  array[
+    'Speaking and conversation practice',
+    'Grammar and vocabulary development',
+    'Pronunciation and confidence building',
+    'Interview preparation and communication skills',
+    'Public speaking and presentation skills'
+  ],
+  null, 'Enquire Now', '#contact', 'published', 0
+where not exists (select 1 from public.courses where slug = 'professional-spoken-english');
+
+insert into public.courses (
+  slug, title, short_description, category, image_url, image_alt, highlights,
+  duration, button_label, button_url, status, display_order
+)
+select
+  'computer-training',
+  'Computer Training',
+  'Practical computer skills training covering MS Office, Excel, Tally with GST, Python programming, Power BI, and AI basics for students and working professionals.',
+  'Computer', '/images/computer-training-lab.png', 'Computer training laboratory',
+  array['MS Office | Tally | GST', 'Python | Power BI | Typing', 'Practical & Career-Focused'],
+  'Digital Skills', 'Enquire Now', '#contact', 'published', 1
+where not exists (select 1 from public.courses where slug = 'computer-training');
+
+insert into public.courses (
+  slug, title, short_description, category, image_url, image_alt, highlights,
+  duration, button_label, button_url, status, display_order
+)
+select
+  'school-tuition',
+  'School Tuition',
+  'Subject-wise coaching for Karnataka State Board, CBSE, ICSE and other board students from Classes 1 to 10, with homework support, chapter-wise assessments, and regular practice.',
+  'School', '/images/up.png', 'Students learning at Khaki Academy',
+  array['State | CBSE | ICSE', 'All Subjects', 'Regular Tests & Support'],
+  'Classes 1-10', 'Enquire Now', '#contact', 'published', 2
+where not exists (select 1 from public.courses where slug = 'school-tuition');
+
+insert into public.courses (
+  slug, title, short_description, category, image_url, image_alt, highlights,
+  duration, button_label, button_url, status, display_order
+)
+select
+  '1st-2nd-puc',
+  '1st & 2nd PUC',
+  'In-depth chapter-wise coaching for 1st and 2nd PUC Science (PCMB) and Commerce (Accountancy, Business Studies, Economics) with board exam preparation and mock tests.',
+  'PUC', '/images/kak.png', 'PUC academic programme',
+  array['PCMB | PCMC | Commerce', 'Chapter-wise Teaching', 'Exam Preparation'],
+  'Science & Commerce', 'Enquire Now', '#contact', 'published', 3
+where not exists (select 1 from public.courses where slug = '1st-2nd-puc');
+
+insert into public.courses (
+  slug, title, short_description, category, image_url, image_alt, highlights,
+  duration, button_label, button_url, status, display_order
+)
+select
+  'cet-neet-jee-foundation',
+  'CET, NEET & JEE Foundation',
+  'Concept-focused foundation preparation for CET, NEET and JEE. Suitable from Classes 8-10 onwards, with weekend classes, practice sessions, and regular revision.',
+  'Foundation', '/images/CET.PNG', 'CET, NEET and JEE Foundation course',
+  array['Classes 8 - 10', 'Concept Building', 'Practice Tests & Expert Guidance'],
+  'Competitive Exam Prep', 'Enquire Now', '#contact', 'published', 4
+where not exists (select 1 from public.courses where slug = 'cet-neet-jee-foundation');
+
+update public.courses
+set image_url = '/images/CET.PNG', image_alt = 'CET, NEET and JEE Foundation course'
+where lower(title) like '%cet%' and lower(title) like '%jee%';
+
+update public.faculty
+set designation = 'Admin & Senior Faculty',
+    specialisations = array['Administration and Academics', 'Mathematics: 10th Grade, 1st PUC and 2nd PUC.', 'Computer Training.', 'Soft Skills Training.', 'Academic Guidance and Student Mentoring.'],
+    display_order = 1
+where upper(full_name) = 'VASANTH KUMAR N. G.';
+
+update public.faculty
+set designation = 'Administrator',
+    specialisations = array['Administration', 'Business Studies - 2nd PUC', 'Computer Education', 'Spoken English Training'],
+    display_order = 2
+where upper(full_name) = 'ARUNA G';
+
+update public.faculty
+set designation = 'Science Faculty - PCM',
+    specialisations = array['Department: Science', 'Physics, Chemistry and Mathematics (PCM)', 'Physics', 'First PUC', 'Second PUC'],
+    display_order = 3
+where upper(full_name) = 'ARUN S. A.';
+
+update public.faculty
+set designation = 'Science Faculty - PCM',
+    specialisations = array['Department: Science', 'Physics, Chemistry and Mathematics (PCM)', 'Organic Chemistry', 'PUC Chemistry'],
+    display_order = 4
+where upper(full_name) = 'SRIKANTH P';
+
+insert into public.faculty (
+  full_name, photograph, designation, institution, qualifications, specialisations,
+  experience_years, professional_profile, teaching_methodology, additional_achievements,
+  status, display_order
+)
+select
+  'VASANTH', '', 'Science Faculty - PCM',
+  'KHAKI ACADEMY - ACADEMY OF EXCELLENCE',
+  array[]::text[],
+  array['Department: Science', 'Physics, Chemistry and Mathematics (PCM)'],
+  0,
+  'Profile information is being updated through the Khaki Academy administration team.',
+  'Profile information is being updated through the Khaki Academy administration team.',
+  '', 'published', 5
+where not exists (select 1 from public.faculty where upper(full_name) = 'VASANTH');
+
+update public.faculty
+set designation = 'Science Faculty - PCM',
+    specialisations = array['Department: Science', 'Physics, Chemistry and Mathematics (PCM)', 'Organic Chemistry'],
+    display_order = 6
+where upper(full_name) = 'GANESH';
+
+update public.faculty
+set experience_years = 5
+where upper(full_name) = 'NIKHATH AYESHA';
+
+update public.faculty
+set designation = 'Finance Department', experience_years = 5,
+    specialisations = array['Department: Finance', 'Finance Department'],
+    display_order = 7
+where upper(full_name) in ('ANIL', 'ANIL V');
+
 create index if not exists idx_website_sections_published
   on public.website_sections (page_key, status, display_order);
 create index if not exists idx_courses_published

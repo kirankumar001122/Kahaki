@@ -5,11 +5,18 @@ import { usePublishedContent } from '../hooks/usePublishedContent';
 import './TeachingStaff.css';
 
 function FacultyProfile({ faculty }) {
+  const photograph = faculty.photograph?.trim();
   return (
     <article className="staff-profile">
       <div className="staff-profile__identity">
         <div className="staff-profile__portrait photo-frame photo-frame__media">
-          <img src={faculty.photograph} alt={`${faculty.full_name} portrait`} loading="lazy" />
+          {photograph ? (
+            <img src={photograph} alt={`${faculty.full_name} portrait`} loading="lazy" />
+          ) : (
+            <span className="staff-profile__portrait-placeholder" role="img" aria-label={`Photograph unavailable for ${faculty.full_name}`}>
+              Photograph unavailable
+            </span>
+          )}
         </div>
         <div className="staff-profile__identity-copy">
           <p className="staff-profile__eyebrow">Teaching Faculty</p>
@@ -51,10 +58,40 @@ function FacultyProfile({ faculty }) {
   );
 }
 
+const STAFF_ORDER = [
+  'vasanth kumar',
+  'aruna g',
+  'arun',
+  'shrikanth',
+  'vasanth',
+  'ganesh',
+  'anil',
+];
+
+function staffIdentityKey(name) {
+  const normalized = name.trim().toLowerCase().replace(/[^a-z0-9]/g, '');
+  return normalized.startsWith('anil') ? 'anil' : normalized;
+}
+
+function staffOrderIndex(name) {
+  const normalized = name.trim().toLowerCase();
+  const index = STAFF_ORDER.findIndex((entry) => normalized === entry || normalized.startsWith(`${entry} `));
+  return index === -1 ? STAFF_ORDER.length : index;
+}
+
 export default function TeachingStaff() {
   const [expanded, setExpanded] = useState(false);
   const { faculty } = usePublishedContent();
-  const staff = faculty.length > 0 ? faculty : DEFAULT_TEACHING_STAFF;
+  const availableStaff = faculty.length > 0
+    ? [...faculty.filter((member) => staffIdentityKey(member.full_name) !== 'vasanth'), ...DEFAULT_TEACHING_STAFF.filter((fallback) => (
+      staffIdentityKey(fallback.full_name) !== 'vasanth' &&
+      !faculty.some((member) => staffIdentityKey(member.full_name) === staffIdentityKey(fallback.full_name))
+    ))]
+    : DEFAULT_TEACHING_STAFF.filter((member) => staffIdentityKey(member.full_name) !== 'vasanth');
+  const staff = [...availableStaff].sort((a, b) => {
+    const orderDifference = staffOrderIndex(a.full_name) - staffOrderIndex(b.full_name);
+    return orderDifference || (a.display_order || 0) - (b.display_order || 0);
+  });
 
   return (
     <section id="teaching-staff" className="teaching-staff section">

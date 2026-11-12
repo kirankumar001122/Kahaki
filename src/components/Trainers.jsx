@@ -1,14 +1,13 @@
 import './Trainers.css';
 
 export default function Trainers() {
-  const scrollTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
-
   return (
     <section id="trainers" className="trainers section">
       <div className="container">
         <div className="text-center fade-in">
-          <p className="section-label">Leadership at Khaki Academy</p>
-          <h2 className="section-title">Meet Our Founders</h2>
+          <p className="section-label">Academy of Excellence</p>
+          <h2 className="section-title">FOUNDERS OF KHAKI ACADEMY</h2>
+          <p className="section-subtitle">Building a Foundation for Excellence</p>
         </div>
 
         {/* Founder feature layout */}
@@ -28,28 +27,46 @@ export default function Trainers() {
 
           {/* Right — Bio */}
           <div className="founder__bio">
-            <p className="section-label">Founder &amp; Managing Director</p>
-            <h2 className="founder__bio-name">Meet Govardhan Krishna</h2>
+            <p className="section-label">Founder 1 · Founder &amp; Director</p>
+            <h2 className="founder__bio-name">GOVARDHAN KRISHNA</h2>
 
             <p className="founder__bio-para">
-              Govardhan Krishna is the founder and managing director of Khaki Academy — an Academy of Excellence
-              committed to transforming how students learn and grow. With a deep passion for English communication,
-              academic coaching, and student empowerment, he established Khaki Academy to bridge the gap between
-              classroom learning and real-world application.
+              Khaki Academy was founded by Govardhan Krishna and Vignesh Krishna with a shared vision of providing
+              quality education, professional training and practical skill development.
             </p>
 
             <p className="founder__bio-para">
-              Under his leadership, Khaki Academy brings together expert academic support, professional spoken
-              English training, computer skills, and competitive exam preparation — all under one roof in Malur,
-              Karnataka. His vision is to build confident, capable learners ready to lead their futures.
+              Govardhan Krishna is an educator, entrepreneur and Resource Person in English Accents and Communication
+              Skills. He helps learners strengthen their English language proficiency, communication abilities and
+              professional confidence.
             </p>
 
-            <button
-              className="btn btn-primary founder__cta"
-              onClick={() => scrollTo('contact')}
-            >
-              Contact the academy →
-            </button>
+            <p className="founder__bio-para">
+              He is recognised for his work in English grammar and his reported world-record achievements, including
+              writing 7,000 English grammar formulae in 4 hours, 55 minutes and 2 seconds.
+            </p>
+
+            <h3 className="founder__bio-heading">Educational Qualifications</h3>
+            <ul className="founder__focus-list">
+              <li>Master of Business Administration (MBA) — Finance</li>
+              <li>Master of Commerce (M.Com)</li>
+            </ul>
+
+            <h3 className="founder__bio-heading">Areas of Expertise</h3>
+            <ul className="founder__focus-list">
+              <li>English accents and pronunciation</li>
+              <li>Spoken English and communication skills</li>
+              <li>English grammar and sentence formation</li>
+              <li>Professional and workplace communication</li>
+              <li>Curriculum planning and educational leadership</li>
+              <li>Academic and professional skill development</li>
+            </ul>
+
+            <h3 className="founder__bio-heading">Vision</h3>
+            <p className="founder__bio-para">
+              To empower students and professionals with knowledge, effective communication, confidence and
+              practical skills for lifelong growth.
+            </p>
           </div>
         </div>
 
@@ -66,8 +83,8 @@ export default function Trainers() {
           </div>
 
           <div className="founder__bio">
-            <p className="section-label">Co-Founder</p>
-            <h2 className="founder__bio-name">Vignesh Krishna</h2>
+            <p className="section-label">Founder 2 · Co-Founder</p>
+            <h2 className="founder__bio-name">VIGNESH KRISHNA</h2>
             <p className="founder__bio-organization">KHAKI ACADEMY — ACADEMY OF EXCELLENCE</p>
 
             <h3 className="founder__bio-heading">Educational Qualification</h3>

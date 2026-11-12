@@ -17,7 +17,7 @@ const ACHIEVEMENTS = [
     type: 'photo',
   },
   {
-    img: '/images/Gov2.jpeg',
+    img: '/images/cert.jpeg',
     tag: "Kalam's World Records",
     title: 'Congratulations Record Holder 2023',
     caption:

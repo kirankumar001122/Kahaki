@@ -6,9 +6,9 @@
 /* ── Founder layout (image 3 style) ──────────────────────── */
 .founder__layout {
   display: grid;
-  grid-template-columns: 340px 1fr;
+  grid-template-columns: minmax(280px, 360px) 1fr;
   gap: var(--space-12);
-  align-items: flex-start;
+  align-items: center;
   margin-top: var(--space-10);
 }
 
@@ -114,6 +114,10 @@
   color: var(--slate);
   line-height: 1.75;
   margin-bottom: var(--space-5);
+}
+
+.founder__bio .founder__focus-list + .founder__bio-heading {
+  margin-top: var(--space-6);
 }
 
 .founder__focus-list {

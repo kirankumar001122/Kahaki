@@ -1,0 +1,119 @@
+.online-classes {
+  background: var(--navy);
+  color: var(--white);
+}
+
+.online-classes__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(300px, .95fr);
+  align-items: center;
+  gap: var(--space-12);
+}
+
+.online-classes .section-title {
+  color: var(--white);
+}
+
+.online-classes__intro {
+  max-width: 640px;
+  margin-top: var(--space-5);
+  color: rgba(255,255,255,.78);
+  font-size: 1rem;
+  line-height: 1.75;
+}
+
+.online-classes__features {
+  display: grid;
+  gap: var(--space-4);
+  margin-top: var(--space-8);
+}
+
+.online-classes__feature {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  color: rgba(255,255,255,.9);
+  line-height: 1.5;
+}
+
+.online-classes__feature svg {
+  flex: 0 0 auto;
+  color: var(--gold-light);
+  margin-top: .15rem;
+}
+
+.online-classes__actions {
+  margin-top: var(--space-8);
+}
+
+.online-classes__visual {
+  min-width: 0;
+}
+
+.online-classes__image-card {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(212,180,114,.55);
+  border-radius: 2rem 1rem 2rem 1rem;
+  box-shadow: var(--shadow-xl);
+}
+
+.online-classes__image-card img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+.online-classes__badge {
+  position: absolute;
+  right: var(--space-5);
+  bottom: var(--space-5);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: .7rem 1rem;
+  border-radius: var(--radius-full);
+  color: var(--navy);
+  background: var(--gold);
+  font-size: .82rem;
+  font-weight: 800;
+}
+
+.online-classes__quick-links {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+}
+
+.online-classes__quick-links div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  border: 1px solid rgba(255,255,255,.16);
+  border-radius: var(--radius-md);
+  color: var(--gold-light);
+  font-size: .85rem;
+  font-weight: 700;
+}
+
+@media (max-width: 800px) {
+  .online-classes__layout {
+    grid-template-columns: 1fr;
+    gap: var(--space-8);
+  }
+}
+
+@media (max-width: 480px) {
+  .online-classes__quick-links {
+    grid-template-columns: 1fr;
+  }
+
+  .online-classes__badge {
+    right: var(--space-3);
+    bottom: var(--space-3);
+  }
+}

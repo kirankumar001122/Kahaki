@@ -9,13 +9,30 @@ const COURSES = [
     tagColor: 'gold',
     level: '',
     title: 'Professional Spoken English',
-    desc: 'Absolute Beginner to Advanced levels. American & British Accents. Fluent & Grammatically Correct.',
+    desc: 'Build confident communication through practical, classroom-based spoken English training.',
     features: [
       'Speaking and conversation practice',
       'Grammar and vocabulary development',
       'Pronunciation and confidence building',
       'Interview preparation and communication skills',
       'Public speaking and presentation skills',
+    ],
+    img: '/images/professional-spoken-english.png',
+  },
+  {
+    tag: 'Language & Communication',
+    tagColor: 'navy',
+    level: 'Online',
+    title: 'Professional Spoken English — Online',
+    desc: 'Develop confident English communication skills through structured online training, practical speaking activities, pronunciation improvement, grammar development and real-world communication practice.',
+    features: [
+      'English speaking and fluency development',
+      'Accent training and pronunciation',
+      'English grammar and sentence formation',
+      'Professional communication',
+      'Interview preparation',
+      'Public speaking and presentation skills',
+      'Practical conversation sessions',
     ],
     img: '/images/professional-spoken-english.png',
   },
@@ -43,7 +60,7 @@ const COURSES = [
       'All Subjects',
       'Regular Tests & Support',
     ],
-    img: '/images/up.png',
+    img: '/images/8.PNG',
   },
   {
     tag: 'PUC',
@@ -56,7 +73,7 @@ const COURSES = [
       'Chapter-wise Teaching',
       'Exam Preparation',
     ],
-    img: '/images/kak.png',
+    img: '/images/1st.PNG',
   },
   {
     tag: 'Foundation',
@@ -69,7 +86,7 @@ const COURSES = [
       'Concept Building',
       'Practice Tests & Expert Guidance',
     ],
-    img: '/images/academic-programme-1.png',
+    img: '/images/image.png',
   },
 ];
 
@@ -102,6 +119,10 @@ const COURSE_HIGHLIGHTS = {
     'Subject-wise preparation and revision',
   ],
 };
+
+function normalizeCourseTitle(title) {
+  return title.trim().toLowerCase().replace(/[^\w]+/g, ' ').replace(/\s+/g, ' ');
+}
 
 function CourseHighlights({ features, id, open, onToggle }) {
   return (
@@ -152,8 +173,7 @@ export default function Courses() {
   }, [openIndex]);
 
   const courses = useMemo(() => {
-    if (publishedCourses.length === 0) return COURSES;
-    return publishedCourses.map((course) => ({
+    const cmsCourses = publishedCourses.map((course) => ({
       tag: course.category || 'Academic',
       tagColor: course.display_order % 2 === 0 ? 'gold' : 'navy',
       level: course.duration || '',
@@ -162,12 +182,22 @@ export default function Courses() {
       features: course.highlights?.length
         ? course.highlights
         : COURSE_HIGHLIGHTS[course.title.trim().toLowerCase()] || [],
-      img: course.title.trim().toLowerCase() === 'professional spoken english'
+      img: normalizeCourseTitle(course.title) === '1st 2nd puc'
+        ? '/images/1st.PNG'
+        : normalizeCourseTitle(course.title) === 'school tuition'
+        ? '/images/8.PNG'
+        : course.title.trim().toLowerCase().includes('cet') && course.title.trim().toLowerCase().includes('jee')
+        ? '/images/image.png'
+        : course.title.trim().toLowerCase().includes('professional spoken english')
         ? '/images/professional-spoken-english.png'
         : course.title.trim().toLowerCase() === 'computer training'
           ? '/images/computer-training-lab.png'
           : course.image_url || '/images/academic-programme-1.png',
     }));
+    const fallbackCourses = COURSES.filter((course) =>
+      !cmsCourses.some((published) => normalizeCourseTitle(published.title) === normalizeCourseTitle(course.title))
+    );
+    return [...cmsCourses, ...fallbackCourses];
   }, [publishedCourses]);
 
   const scrollToContact = () => {
@@ -187,21 +217,23 @@ export default function Courses() {
         </div>
 
         <div className="courses__grid">
-          {courses.map((course, i) => (
+          {courses.slice(1).map((course, i) => (
             <div
               key={i}
               className="course-card fade-in"
               data-open={openIndex === i ? 'true' : undefined}
               style={{ transitionDelay: `${i * 0.08}s` }}
             >
-              <div className="course-card__img-wrap">
+              <div className={`course-card__img-wrap ${course.img === '/images/image.png' ? 'course-card__img-wrap--full' : ''}`}>
                 <img src={course.img} alt={course.title} className="course-card__img" loading="lazy" />
                 <span className={`course-card__tag course-card__tag--${course.tagColor}`}>{course.tag}</span>
               </div>
 
               <div className="course-card__body">
                 {course.level && <p className="course-card__level">{course.level}</p>}
-                <h3 className="course-card__title">{course.title}</h3>
+                {normalizeCourseTitle(course.title) !== '1st 2nd puc' && (
+                  <h3 className="course-card__title">{course.title}</h3>
+                )}
                 <p className="course-card__desc">{course.desc}</p>
 
                 {course.features.length > 0 && (
