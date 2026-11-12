@@ -8,6 +8,27 @@ const ONLINE_FEATURES = [
   'Flexible learning for students and working professionals',
 ];
 
+const ONLINE_CLASS_IMAGES = [
+  {
+    src: '/images/WhatsApp%20Image%202026-11-12%20at%2012.51.42%20PM%20(1).jpeg',
+    alt: 'Khaki Academy online class session',
+    title: 'Learn Live',
+    text: 'Join focused online sessions with expert guidance.',
+  },
+  {
+    src: '/images/WhatsApp%20Image%202026-11-12%20at%2012.51.42%20PM.jpeg',
+    alt: 'Khaki Academy online learning activity',
+    title: 'Practise With Purpose',
+    text: 'Build confidence through practical activities and feedback.',
+  },
+  {
+    src: '/images/WhatsApp%20Image%202026-11-12%20at%2012.51.43%20PM.jpeg',
+    alt: 'Khaki Academy student support session',
+    title: 'Stay Connected',
+    text: 'Ask questions, revise regularly and keep progressing.',
+  },
+];
+
 export default function OnlineClasses() {
   const scrollToContact = () => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
 
@@ -40,12 +61,19 @@ export default function OnlineClasses() {
           </div>
 
           <div className="online-classes__visual fade-in-right">
-            <div className="online-classes__image-card">
-              <img src="/images/image1.jpg" alt="Online learning at Khaki Academy" loading="lazy" />
-              <div className="online-classes__badge">
-                <Video size={18} />
-                <span>Live &amp; Interactive</span>
-              </div>
+            <div className="online-classes__image-grid">
+              {ONLINE_CLASS_IMAGES.map((image) => (
+                <article className="online-classes__image-card" key={image.src}>
+                  <img src={image.src} alt={image.alt} loading="lazy" />
+                  <div className="online-classes__image-copy">
+                    <div className="online-classes__badge">
+                      <Video size={16} />
+                      <span>{image.title}</span>
+                    </div>
+                    <p>{image.text}</p>
+                  </div>
+                </article>
+              ))}
             </div>
             <div className="online-classes__quick-links">
               <div><Laptop size={18} /><span>Learn online</span></div>
