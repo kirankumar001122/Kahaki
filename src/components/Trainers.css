@@ -84,21 +84,22 @@
   padding: var(--space-4) 0;
 }
 
+.founder__designation {
+  margin-bottom: var(--space-2);
+  color: var(--gold-dark);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
 .founder__bio-name {
   font-size: clamp(1.75rem, 4vw, 2.5rem);
   font-weight: 900;
   color: var(--navy);
   margin-bottom: var(--space-5);
   line-height: 1.15;
-}
-
-.founder__bio-organization {
-  color: var(--gold-dark);
-  font-size: 0.8rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  margin-top: calc(var(--space-5) * -1);
-  margin-bottom: var(--space-6);
 }
 
 .founder__bio-heading {

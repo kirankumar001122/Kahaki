@@ -6,12 +6,19 @@ import './TeachingStaff.css';
 
 function FacultyProfile({ faculty }) {
   const photograph = faculty.photograph?.trim();
+  const isAnil = faculty.full_name.trim().toLowerCase().startsWith('anil');
+  const isNaveen = faculty.full_name.trim().toLowerCase().startsWith('naveen kumar');
   return (
     <article className="staff-profile">
       <div className="staff-profile__identity">
         <div className="staff-profile__portrait photo-frame photo-frame__media">
           {photograph ? (
-            <img src={photograph} alt={`${faculty.full_name} portrait`} loading="lazy" />
+            <img
+              src={photograph}
+              alt={`${faculty.full_name} portrait`}
+              className={`staff-profile__portrait-image${isAnil ? ' staff-profile__portrait-image--anil' : ''}`}
+              loading="lazy"
+            />
           ) : (
             <span className="staff-profile__portrait-placeholder" role="img" aria-label={`Photograph unavailable for ${faculty.full_name}`}>
               Photograph unavailable
@@ -49,6 +56,11 @@ function FacultyProfile({ faculty }) {
         <section className="staff-profile__copy">
           <h4><Sparkles size={18} /> Professional Profile</h4>
           <p>{faculty.professional_profile}</p>
+          {isNaveen && (
+            <p className="staff-profile__achievement">
+              <strong>Achievement:</strong> State Second Topper in M.Tech
+            </p>
+          )}
           <h4>Teaching Approach</h4>
           <p>{faculty.teaching_methodology}</p>
           {faculty.additional_achievements && <p>{faculty.additional_achievements}</p>}
@@ -73,6 +85,47 @@ function staffIdentityKey(name) {
   return normalized.startsWith('anil') ? 'anil' : normalized;
 }
 
+function normalizeFacultyText(value) {
+  if (typeof value === 'string') return value.replace(/\?/g, '-');
+  if (Array.isArray(value)) return value.map(normalizeFacultyText);
+  return value;
+}
+
+function normalizePublishedFaculty(member) {
+  const identity = staffIdentityKey(member.full_name);
+  const normalizedMember = Object.fromEntries(
+    Object.entries(member).map(([key, value]) => [key, normalizeFacultyText(value)]),
+  );
+  normalizedMember.full_name = normalizedMember.full_name.replace(/\./g, '');
+  if (identity === 'anil') {
+    return {
+      ...normalizedMember,
+      designation: 'HR & Finance Executive | Computer & Soft Skills Trainer',
+      institution: 'KHAKI ACADEMY — ACADEMY OF EXCELLENCE',
+      qualifications: ['Master of Business Administration (MBA)'],
+      specialisations: [
+        'Human Resource Management',
+        'Finance & Administration',
+        'Computer Education',
+        'Soft Skills Training',
+        'Kannada & Social Science',
+      ],
+      experience_years: 5,
+      photograph: '/images/teachers/ANIL V.PNG',
+      professional_profile: 'Anil V is an MBA-qualified professional with five years of experience in administration, finance, HR management and academic training. He combines management expertise with practical teaching skills, focusing on effective administration, computer education, communication skills and students’ overall development.',
+      teaching_methodology: 'At KHAKI ACADEMY, he contributes to efficient institutional management while delivering practical, student-focused training that enhances learners’ knowledge, confidence and professional skills.',
+      additional_achievements: 'KHAKI ACADEMY — ACADEMY OF EXCELLENCE. Empowering learners through knowledge, clarity, and academic excellence.',
+    };
+  }
+  return identity === 'nikhathayesha'
+    ? {
+      ...normalizedMember,
+      photograph: '/images/teachers/NIKHATH AYESHA-white.PNG',
+      experience_years: 5,
+    }
+    : normalizedMember;
+}
+
 function staffOrderIndex(name) {
   const normalized = name.trim().toLowerCase();
   const index = STAFF_ORDER.findIndex((entry) => normalized === entry || normalized.startsWith(`${entry} `));
@@ -83,7 +136,7 @@ export default function TeachingStaff() {
   const [expanded, setExpanded] = useState(false);
   const { faculty } = usePublishedContent();
   const availableStaff = faculty.length > 0
-    ? [...faculty.filter((member) => staffIdentityKey(member.full_name) !== 'vasanth'), ...DEFAULT_TEACHING_STAFF.filter((fallback) => (
+    ? [...faculty.filter((member) => staffIdentityKey(member.full_name) !== 'vasanth').map(normalizePublishedFaculty), ...DEFAULT_TEACHING_STAFF.filter((fallback) => (
       staffIdentityKey(fallback.full_name) !== 'vasanth' &&
       !faculty.some((member) => staffIdentityKey(member.full_name) === staffIdentityKey(fallback.full_name))
     ))]

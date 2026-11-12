@@ -74,11 +74,11 @@ const ACHIEVEMENTS = [
     type: 'certificate',
   },
   {
-    img: '/images/cert-govardhan2.jpg',
-    tag: 'World Record Achievement',
-    title: 'World Record Certificate & Trophy',
+    img: '/images/Gov2.jpeg',
+    tag: "Kalam's World Records",
+    title: 'Congratulations Record Holder 2023',
     caption:
-      'Govardhan Krishna holding his High Range Book of World Records certificate and trophy for writing 7,000 English Grammar Formulae in 4 hours 55 minutes and 02 seconds.',
+      "Govardhan Krishna recognised by Kalam's World Records as a certified Record Holder for 2023.",
     type: 'certificate',
   },
 ];

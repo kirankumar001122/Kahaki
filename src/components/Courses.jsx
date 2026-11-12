@@ -22,8 +22,8 @@ const COURSES = [
   {
     tag: 'Language & Communication',
     tagColor: 'navy',
-    level: 'Online',
-    title: 'Professional Spoken English — Online',
+    level: 'Offline',
+    title: 'Professional Spoken English',
     desc: 'Develop confident English communication skills through structured online training, practical speaking activities, pronunciation improvement, grammar development and real-world communication practice.',
     features: [
       'English speaking and fluency development',
@@ -53,14 +53,17 @@ const COURSES = [
     tag: 'School',
     tagColor: 'gold',
     level: 'Classes 1–10',
-    title: 'School Tuition',
-    desc: 'Subject-wise coaching for Karnataka State Board, CBSE, ICSE and other board students from Classes 1 to 10, with homework support, chapter-wise assessments, and regular practice.',
+    title: 'School Tuition – Classes 1 to 10',
+    desc: 'We provide quality, subject-wise coaching for Classes 1 to 10 across Karnataka State Board, CBSE and ICSE curricula.',
+    tagline: 'Building Knowledge. Strengthening Foundations. Inspiring Success.',
     features: [
-      'State | CBSE | ICSE',
-      'All Subjects',
-      'Regular Tests & Support',
+      'Experienced and dedicated faculty',
+      'Individual attention',
+      'Homework and assignment support',
+      'Regular tests and assessments',
+      'Strong academic foundations',
     ],
-    img: '/images/8.PNG',
+    img: '/images/%20Learning%20Session.png',
   },
   {
     tag: 'PUC',
@@ -86,7 +89,24 @@ const COURSES = [
       'Concept Building',
       'Practice Tests & Expert Guidance',
     ],
-    img: '/images/image.png',
+    img: '/images/8.PNG',
+  },
+  {
+    tag: 'PROFESSIONAL DEVELOPMENT',
+    tagColor: 'navy',
+    level: '',
+    title: 'Professional Soft Skills & Communication Training',
+    desc: 'Develop the confidence to communicate, collaborate and succeed in today’s professional world. At KHAKI ACADEMY, our practical training sessions focus on spoken communication, personality development, public speaking, interview skills, leadership, teamwork and workplace etiquette.',
+    features: [
+      'Communication & Spoken English',
+      'Personality Development',
+      'Public Speaking & Presentation Skills',
+      'Interview & Workplace Readiness',
+      'Leadership & Teamwork',
+      'Professional Etiquette & Confidence Building',
+      'Our Goal: To transform learners into confident communicators and skilled professionals ready to succeed in their academic, personal and professional lives.',
+    ],
+    img: '/images/soft.PNG',
   },
 ];
 
@@ -122,6 +142,17 @@ const COURSE_HIGHLIGHTS = {
 
 function normalizeCourseTitle(title) {
   return title.trim().toLowerCase().replace(/[^\w]+/g, ' ').replace(/\s+/g, ' ');
+}
+
+function removeOnlineSuffix(title) {
+  return title.trim().replace(/\s*[—-]\s*online$/i, '');
+}
+
+function normalizeCourseLevel(title, level) {
+  return normalizeCourseTitle(title).startsWith('professional spoken english') &&
+    level.trim().toLowerCase() === 'online'
+    ? 'Offline'
+    : level;
 }
 
 function CourseHighlights({ features, id, open, onToggle }) {
@@ -176,18 +207,23 @@ export default function Courses() {
     const cmsCourses = publishedCourses.map((course) => ({
       tag: course.category || 'Academic',
       tagColor: course.display_order % 2 === 0 ? 'gold' : 'navy',
-      level: course.duration || '',
-      title: course.title,
+      level: normalizeCourseLevel(course.title, course.duration || ''),
+      title: removeOnlineSuffix(course.title),
       desc: course.short_description || course.detailed_description,
+      tagline: normalizeCourseTitle(course.title).startsWith('school tuition')
+        ? 'Building Knowledge. Strengthening Foundations. Inspiring Success.'
+        : '',
       features: course.highlights?.length
         ? course.highlights
         : COURSE_HIGHLIGHTS[course.title.trim().toLowerCase()] || [],
       img: normalizeCourseTitle(course.title) === '1st 2nd puc'
         ? '/images/1st.PNG'
-        : normalizeCourseTitle(course.title) === 'school tuition'
-        ? '/images/8.PNG'
+        : normalizeCourseTitle(course.title).startsWith('school tuition')
+        ? '/images/%20Learning%20Session.png'
         : course.title.trim().toLowerCase().includes('cet') && course.title.trim().toLowerCase().includes('jee')
-        ? '/images/image.png'
+        ? '/images/8.PNG'
+        : normalizeCourseTitle(course.title) === 'professional soft skills communication training'
+        ? '/images/soft.PNG'
         : course.title.trim().toLowerCase().includes('professional spoken english')
         ? '/images/professional-spoken-english.png'
         : course.title.trim().toLowerCase() === 'computer training'
@@ -195,7 +231,12 @@ export default function Courses() {
           : course.image_url || '/images/academic-programme-1.png',
     }));
     const fallbackCourses = COURSES.filter((course) =>
-      !cmsCourses.some((published) => normalizeCourseTitle(published.title) === normalizeCourseTitle(course.title))
+      !cmsCourses.some((published) => {
+        const publishedTitle = normalizeCourseTitle(published.title);
+        const fallbackTitle = normalizeCourseTitle(course.title);
+        return publishedTitle === fallbackTitle ||
+          (publishedTitle.startsWith('school tuition') && fallbackTitle.startsWith('school tuition'));
+      })
     );
     return [...cmsCourses, ...fallbackCourses];
   }, [publishedCourses]);
@@ -224,7 +265,7 @@ export default function Courses() {
               data-open={openIndex === i ? 'true' : undefined}
               style={{ transitionDelay: `${i * 0.08}s` }}
             >
-              <div className={`course-card__img-wrap ${course.img === '/images/image.png' ? 'course-card__img-wrap--full' : ''}`}>
+              <div className={`course-card__img-wrap ${course.img === '/images/image.png' ? 'course-card__img-wrap--full' : ''} ${course.img === '/images/8.PNG' ? 'course-card__img-wrap--foundation' : ''}`}>
                 <img src={course.img} alt={course.title} className="course-card__img" loading="lazy" />
                 <span className={`course-card__tag course-card__tag--${course.tagColor}`}>{course.tag}</span>
               </div>
@@ -235,6 +276,7 @@ export default function Courses() {
                   <h3 className="course-card__title">{course.title}</h3>
                 )}
                 <p className="course-card__desc">{course.desc}</p>
+                {course.tagline && <p className="course-card__tagline">{course.tagline}</p>}
 
                 {course.features.length > 0 && (
                   <CourseHighlights

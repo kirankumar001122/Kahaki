@@ -36,7 +36,7 @@ export default function OnlineClasses() {
         <div className="online-classes__layout">
           <div className="online-classes__content fade-in-left">
             <p className="section-label">Learn From Anywhere</p>
-            <h2 className="section-title">Online Classes at Khaki Academy</h2>
+            <h2 className="section-title">Professional Spoken English – Online</h2>
             <p className="online-classes__intro">
               Access expert guidance, practical activities and personal support through engaging
               online learning designed for today&apos;s students and professionals.

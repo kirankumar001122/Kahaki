@@ -319,13 +319,28 @@ insert into public.faculty (
 )
 select
   'ANIL', '/images/teachers/ANIL V.PNG',
-  'Finance Department',
+  'HR & Finance Executive | Computer & Soft Skills Trainer',
   'KHAKI ACADEMY - ACADEMY OF EXCELLENCE',
-  array[]::text[], array['Finance Department'], 5,
-  'Anil supports the Finance Department with 5 years of experience.',
-  'Professional and organised administrative support.', '',
+  array['Master of Business Administration (MBA)'],
+  array['Human Resource Management', 'Finance & Administration', 'Computer Education', 'Soft Skills Training', 'Kannada & Social Science'], 5,
+  'Anil V is an MBA-qualified professional with five years of experience in administration, finance, HR management and academic training. He combines management expertise with practical teaching skills, focusing on effective administration, computer education, communication skills and students’ overall development.',
+  'At KHAKI ACADEMY, he contributes to efficient institutional management while delivering practical, student-focused training that enhances learners’ knowledge, confidence and professional skills.',
+  'KHAKI ACADEMY — ACADEMY OF EXCELLENCE. Empowering learners through knowledge, clarity, and academic excellence.',
   'published', 13
 where not exists (select 1 from public.faculty where upper(full_name) in ('ANIL', 'ANIL V'));
+
+update public.faculty
+set photograph = '/images/teachers/ANIL V.PNG',
+    designation = 'HR & Finance Executive | Computer & Soft Skills Trainer',
+    institution = 'KHAKI ACADEMY — ACADEMY OF EXCELLENCE',
+    qualifications = array['Master of Business Administration (MBA)'],
+    specialisations = array['Human Resource Management', 'Finance & Administration', 'Computer Education', 'Soft Skills Training', 'Kannada & Social Science'],
+    experience_years = 5,
+    professional_profile = 'Anil V is an MBA-qualified professional with five years of experience in administration, finance, HR management and academic training. He combines management expertise with practical teaching skills, focusing on effective administration, computer education, communication skills and students’ overall development.',
+    teaching_methodology = 'At KHAKI ACADEMY, he contributes to efficient institutional management while delivering practical, student-focused training that enhances learners’ knowledge, confidence and professional skills.',
+    additional_achievements = 'KHAKI ACADEMY — ACADEMY OF EXCELLENCE. Empowering learners through knowledge, clarity, and academic excellence.'
+where upper(full_name) in ('ANIL', 'ANIL V')
+;
 
 insert into public.courses (
   slug, title, short_description, detailed_description, category, image_url, image_alt,
@@ -390,12 +405,23 @@ insert into public.courses (
 )
 select
   'school-tuition',
-  'School Tuition',
-  'Subject-wise coaching for Karnataka State Board, CBSE, ICSE and other board students from Classes 1 to 10, with homework support, chapter-wise assessments, and regular practice.',
-  'School', '/images/up.png', 'Students learning at Khaki Academy',
-  array['State | CBSE | ICSE', 'All Subjects', 'Regular Tests & Support'],
+  'School Tuition – Classes 1 to 10',
+  'We provide quality, subject-wise coaching for Classes 1 to 10 across Karnataka State Board, CBSE and ICSE curricula.',
+  'School', '/images/%20Learning%20Session.png', 'School Tuition Classes 1 to 10',
+  array['Experienced and dedicated faculty', 'Individual attention', 'Homework and assignment support', 'Regular tests and assessments', 'Strong academic foundations', 'Building Knowledge. Strengthening Foundations. Inspiring Success.'],
   'Classes 1-10', 'Enquire Now', '#contact', 'published', 2
 where not exists (select 1 from public.courses where slug = 'school-tuition');
+
+update public.courses
+set title = 'School Tuition – Classes 1 to 10',
+    short_description = 'We provide quality, subject-wise coaching for Classes 1 to 10 across Karnataka State Board, CBSE and ICSE curricula.',
+    detailed_description = 'Experienced and dedicated faculty. Individual attention. Homework and assignment support. Regular tests and assessments. Strong academic foundations. Building Knowledge. Strengthening Foundations. Inspiring Success.',
+    category = 'School',
+    image_url = '/images/%20Learning%20Session.png',
+    image_alt = 'School Tuition Classes 1 to 10',
+    highlights = array['Experienced and dedicated faculty', 'Individual attention', 'Homework and assignment support', 'Regular tests and assessments', 'Strong academic foundations', 'Building Knowledge. Strengthening Foundations. Inspiring Success.'],
+    duration = 'Classes 1-10'
+where slug = 'school-tuition';
 
 insert into public.courses (
   slug, title, short_description, category, image_url, image_alt, highlights,
@@ -418,14 +444,28 @@ select
   'cet-neet-jee-foundation',
   'CET, NEET & JEE Foundation',
   'Concept-focused foundation preparation for CET, NEET and JEE. Suitable from Classes 8-10 onwards, with weekend classes, practice sessions, and regular revision.',
-  'Foundation', '/images/CET.PNG', 'CET, NEET and JEE Foundation course',
+  'Foundation', '/images/8.PNG', 'CET, NEET and JEE Foundation course',
   array['Classes 8 - 10', 'Concept Building', 'Practice Tests & Expert Guidance'],
   'Competitive Exam Prep', 'Enquire Now', '#contact', 'published', 4
 where not exists (select 1 from public.courses where slug = 'cet-neet-jee-foundation');
 
 update public.courses
-set image_url = '/images/CET.PNG', image_alt = 'CET, NEET and JEE Foundation course'
+set image_url = '/images/8.PNG', image_alt = 'CET, NEET and JEE Foundation course'
 where lower(title) like '%cet%' and lower(title) like '%jee%';
+
+insert into public.courses (
+  slug, title, short_description, detailed_description, category, image_url, image_alt,
+  highlights, duration, button_label, button_url, status, display_order
+)
+select
+  'professional-soft-skills-communication-training',
+  'Professional Soft Skills & Communication Training',
+  'Develop the confidence to communicate, collaborate and succeed in today’s professional world. At KHAKI ACADEMY, our practical training sessions focus on spoken communication, personality development, public speaking, interview skills, leadership, teamwork and workplace etiquette.',
+  'Our Goal: To transform learners into confident communicators and skilled professionals ready to succeed in their academic, personal and professional lives.',
+  'PROFESSIONAL DEVELOPMENT', '/images/soft.PNG', 'Professional Soft Skills and Communication Training',
+  array['Communication & Spoken English', 'Personality Development', 'Public Speaking & Presentation Skills', 'Interview & Workplace Readiness', 'Leadership & Teamwork', 'Professional Etiquette & Confidence Building'],
+  '', 'Enquire Now', '#contact', 'published', 5
+where not exists (select 1 from public.courses where slug = 'professional-soft-skills-communication-training');
 
 update public.faculty
 set designation = 'Admin & Senior Faculty',

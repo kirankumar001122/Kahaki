@@ -16,7 +16,7 @@ export default function Trainers() {
           <div className="founder__card photo-frame">
             <div className="founder__img-wrap photo-frame__media">
               <img
-                src="/images/govardhan-krishna.png"
+                src="/images/Founder.PNG"
                 alt="Govardhan Krishna – Founder & Managing Director, Khaki Academy"
                 className="founder__img"
                 loading="lazy"
@@ -27,7 +27,7 @@ export default function Trainers() {
 
           {/* Right — Bio */}
           <div className="founder__bio">
-            <p className="section-label">Founder 1 · Founder &amp; Director</p>
+            <p className="founder__designation">FOUNDER &amp; MANAGING DIRECTOR</p>
             <h2 className="founder__bio-name">GOVARDHAN KRISHNA</h2>
 
             <p className="founder__bio-para">
@@ -83,9 +83,8 @@ export default function Trainers() {
           </div>
 
           <div className="founder__bio">
-            <p className="section-label">Founder 2 · Co-Founder</p>
+            <p className="founder__designation">CO-FOUNDER</p>
             <h2 className="founder__bio-name">VIGNESH KRISHNA</h2>
-            <p className="founder__bio-organization">KHAKI ACADEMY — ACADEMY OF EXCELLENCE</p>
 
             <h3 className="founder__bio-heading">Educational Qualification</h3>
             <p className="founder__bio-para">Bachelor of Engineering (B.E.)</p>
