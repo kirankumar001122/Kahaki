@@ -30,6 +30,22 @@ const EMPTY_FACULTY = {
   status: 'draft', display_order: 0,
 };
 
+const STAFF_ORDER = [
+  'vasanth kumar',
+  'aruna g',
+  'arun',
+  'shrikanth',
+  'vasanth',
+  'ganesh',
+  'anil',
+];
+
+function staffOrderIndex(name) {
+  const normalized = name.trim().toLowerCase();
+  const index = STAFF_ORDER.findIndex((entry) => normalized === entry || normalized.startsWith(`${entry} `));
+  return index === -1 ? STAFF_ORDER.length : index;
+}
+
 function emptyForm(resource) {
   return resource === 'courses' ? EMPTY_COURSE
     : resource === 'sections' ? EMPTY_SECTION
@@ -68,7 +84,13 @@ function ContentManager() {
       const json = await response.json();
       if (response.status === 401) throw new Error('Your session has expired. Please sign in again.');
       if (!response.ok || !json.ok) throw new Error(json.message || 'Unable to load content.');
-      setItems(json.items || []);
+      const loadedItems = json.items || [];
+      setItems(tab === 'faculty'
+        ? [...loadedItems].sort((a, b) => {
+          const orderDifference = staffOrderIndex(a.full_name || '') - staffOrderIndex(b.full_name || '');
+          return orderDifference || (a.display_order || 0) - (b.display_order || 0);
+        })
+        : loadedItems);
     } catch (err) {
       setError(err.message || 'Unable to reach the server.');
     } finally {
