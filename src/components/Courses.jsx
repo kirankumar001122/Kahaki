@@ -20,7 +20,7 @@ const COURSES = [
     img: '/images/professional-spoken-english.png',
   },
   {
-    tag: 'Language & Communication',
+    tag: 'Professional Spoken English',
     tagColor: 'navy',
     level: 'Offline',
     title: 'Professional Spoken English',
@@ -205,7 +205,9 @@ export default function Courses() {
 
   const courses = useMemo(() => {
     const cmsCourses = publishedCourses.map((course) => ({
-      tag: course.category || 'Academic',
+      tag: normalizeCourseTitle(course.title).startsWith('professional spoken english')
+        ? 'Professional Spoken English'
+        : course.category || 'Academic',
       tagColor: course.display_order % 2 === 0 ? 'gold' : 'navy',
       level: normalizeCourseLevel(course.title, course.duration || ''),
       title: removeOnlineSuffix(course.title),
