@@ -1,4 +1,4 @@
-import { ArrowRight, CheckCircle, Laptop, MessageCircle, Video } from 'lucide-react';
+import { CheckCircle, Laptop, MessageCircle, Video } from 'lucide-react';
 import './OnlineClasses.css';
 
 const ONLINE_FEATURES = [
@@ -10,19 +10,19 @@ const ONLINE_FEATURES = [
 
 const ONLINE_CLASS_IMAGES = [
   {
-    src: '/images/WhatsApp%20Image%202026-11-12%20at%2012.51.42%20PM%20(1).jpeg',
+    src: '/images/online-class-learn-live.jpg',
     alt: 'Khaki Academy online class session',
     title: 'Learn Live',
     text: 'Join focused online sessions with expert guidance.',
   },
   {
-    src: '/images/WhatsApp%20Image%202026-11-12%20at%2012.51.42%20PM.jpeg',
+    src: '/images/online-class-practise.jpg',
     alt: 'Khaki Academy online learning activity',
     title: 'Practise With Purpose',
     text: 'Build confidence through practical activities and feedback.',
   },
   {
-    src: '/images/WhatsApp%20Image%202026-11-12%20at%2012.51.43%20PM.jpeg',
+    src: '/images/online-class-stay-connected.jpg',
     alt: 'Khaki Academy student support session',
     title: 'Stay Connected',
     text: 'Ask questions, revise regularly and keep progressing.',
@@ -30,8 +30,6 @@ const ONLINE_CLASS_IMAGES = [
 ];
 
 export default function OnlineClasses() {
-  const scrollToContact = () => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
-
   return (
     <section id="online-classes" className="online-classes section">
       <div className="container">
@@ -53,18 +51,19 @@ export default function OnlineClasses() {
               ))}
             </div>
 
-            <div className="online-classes__actions">
-              <button type="button" className="btn btn-primary" onClick={scrollToContact}>
-                Enquire About Online Classes <ArrowRight size={16} />
-              </button>
-            </div>
+            <p className="online-classes__note">
+              Learn at your own pace with reliable guidance, regular practice and a supportive
+              online classroom experience.
+            </p>
           </div>
 
           <div className="online-classes__visual fade-in-right">
             <div className="online-classes__image-grid">
               {ONLINE_CLASS_IMAGES.map((image) => (
                 <article className="online-classes__image-card" key={image.src}>
-                  <img src={image.src} alt={image.alt} loading="lazy" />
+                  <div className="online-classes__image-frame">
+                    <img src={image.src} alt={image.alt} loading="lazy" />
+                  </div>
                   <div className="online-classes__image-copy">
                     <div className="online-classes__badge">
                       <Video size={16} />
