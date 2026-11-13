@@ -8,6 +8,7 @@ function FacultyProfile({ faculty }) {
   const photograph = faculty.photograph?.trim();
   const isAnil = faculty.full_name.trim().toLowerCase().startsWith('anil');
   const isNaveen = faculty.full_name.trim().toLowerCase().startsWith('naveen kumar');
+  const usesPortraitCrop = ['harish r', 'bharathi s', 'manjunatha t'].includes(faculty.full_name.trim().toLowerCase());
   return (
     <article className="staff-profile">
       <div className="staff-profile__identity">
@@ -16,7 +17,7 @@ function FacultyProfile({ faculty }) {
             <img
               src={photograph}
               alt={`${faculty.full_name} portrait`}
-              className={`staff-profile__portrait-image${isAnil ? ' staff-profile__portrait-image--anil' : ''}`}
+              className={`staff-profile__portrait-image${isAnil ? ' staff-profile__portrait-image--anil' : ''}${usesPortraitCrop ? ' staff-profile__portrait-image--portrait-crop' : ''}`}
               loading="lazy"
             />
           ) : (

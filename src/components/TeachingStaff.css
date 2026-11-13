@@ -127,6 +127,11 @@
   object-position: center;
 }
 
+.staff-profile__portrait.photo-frame img.staff-profile__portrait-image--portrait-crop {
+  object-fit: cover;
+  object-position: center top;
+}
+
 .staff-profile__portrait-placeholder {
   display: grid;
   width: 100%;
