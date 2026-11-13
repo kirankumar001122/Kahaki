@@ -1,12 +1,9 @@
 /* ── Navbar ──────────────────────────────────────────────── */
 .navbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
+  position: relative;
   z-index: 1000;
   transition: all var(--transition-base);
-  background: transparent;
+  background: var(--navy);
   padding: 1.25rem 0;
 }
 

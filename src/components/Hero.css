@@ -6,7 +6,6 @@
   flex-direction: column;
   justify-content: center;
   overflow: hidden;
-  padding-top: 80px;
 }
 
 /* Background */
@@ -276,7 +275,7 @@
 }
 
 @media (max-width: 768px) {
-  .hero { min-height: auto; padding-top: 68px; padding-bottom: var(--space-10); }
+  .hero { min-height: auto; padding-bottom: var(--space-10); }
   .hero__container { gap: var(--space-8); padding: var(--space-6) var(--space-5) var(--space-12); }
   .hero__stats { gap: var(--space-4); padding: var(--space-4); }
   .hero__actions { flex-direction: column; align-items: stretch; }

@@ -18,10 +18,10 @@ const ACHIEVEMENTS = [
   },
   {
     img: '/images/cert.jpeg',
-    tag: "Kalam's World Records",
-    title: 'Congratulations Record Holder 2023',
+    tag: 'A Moment of Honour',
+    title: 'Recognition by Government First Grade College, Malur',
     caption:
-      "Govardhan Krishna recognised by Kalam's World Records as a certified Record Holder for 2023 — celebrating an extraordinary achievement in English Grammar.",
+      'Govardhan Krishna received appreciation from the Principal and Heads of Departments of Government First Grade College, Malur, in the presence of his father, for his remarkable achievement of writing 7,000 English Grammar Formulae in 4 hours, 55 minutes and 2 seconds.\n\nThis recognition marks a proud milestone in his academic journey and reflects his dedication, perseverance and passion for English language education.',
     type: 'photo',
   },
   {
